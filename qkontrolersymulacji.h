@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <QVector>
+#include <QMap>
 
 class QString;
 class ObiektDyskretny;
@@ -18,6 +19,7 @@ public:
 signals:
     void symulacjaZakonczona();
     void wynikSymulacji(QVector<double> y, QVector<double> t,QVector<double> u);
+    void wyslijDaneObiektu(QMap<QString,QVector<double>> m);
 public slots:
     /*!
      * \brief setWymuszenie
@@ -29,19 +31,21 @@ public slots:
     void setWielomianMianownik(std::vector<double> licz,int ktory,std::string id);
     void setDt(double dt);
     void setPredkoscSymulacji(int prSym);
+    void setWariancja(double wariancja);
     void symulacjaCiaglaStart();
     void symulacjaCiaglaStop();
     void symulacjaKrokowa();
     void resetSymulacji();
     void openFile(QString str);
     void saveFile(QString str);
-
+    void getParameters();
 private slots:
     void onTimeout();
     //wysyła sygnał wynikiSymulacji z m_histU, m_histY, m_histT oraz czyści te bufory
     void m_wyslijWynikiSymulacji();
 
 private:
+    QKontrolerSymulacji(){}
     //wymuszenie
     //timer do odmierzania czasu symulacji
     QTimer m_timer;
@@ -66,6 +70,8 @@ private:
     unsigned int m_licznikProbek=0;
     //włąściwa funkcja wykonująca symulację
     void m_symuluj();
+    //tworzenie mapy danych do przesłania do gui
+    void zbierzDaneDoprzeslania();
 };
 
 #endif // QKONTROLERSYMULACJI_H

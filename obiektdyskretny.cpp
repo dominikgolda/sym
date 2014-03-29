@@ -8,14 +8,9 @@
 #include <fstream>
 #include <sstream>
 #include <math.h>
-
-#ifdef MACIEK
-#include "F:/programowanie/QTcreator/rapidxml-1.13/rapidxml.hpp"
-#include "F:/programowanie/QTcreator/rapidxml-1.13/rapidxml_print.hpp"
-#else
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
-#endif
+
 using namespace rapidxml;
 
 ObiektDyskretny::ObiektDyskretny()
@@ -91,8 +86,8 @@ double ObiektDyskretny::symuluj(double u, double *czas){
 
         m_histU.pop_back();
         m_histU.push_front(u);
-//        yNowe = std::inner_product(m_licznik2.begin(),m_licznik2.end(),m_histU.begin(),0);
-//                std::inner_product(m_mianownik2.begin(),m_mianownik2.end(),m_histY.begin(),0);
+        //        yNowe = std::inner_product(m_licznik2.begin(),m_licznik2.end(),m_histU.begin(),0);
+        //                std::inner_product(m_mianownik2.begin(),m_mianownik2.end(),m_histY.begin(),0);
         yNowe =std::inner_product(m_licznik2.begin(),m_licznik2.end(),m_histU.begin(),0.0);
         yNowe -=std::inner_product(m_mianownik2.begin(),m_mianownik2.end(),m_histY.begin(),0.0);
         wypisz_wielomiany();
@@ -159,13 +154,13 @@ void ObiektDyskretny::setMianownik(const std::vector<double> &dane, short ktory,
 }
 
 //double zeruj(double){
- //   return static_cast<double>(0);
+//   return static_cast<double>(0);
 //}
 
 void ObiektDyskretny::resetujSymulacje()
 {
- //   std::transform(m_histU.begin(),m_histU.begin(),m_histU.begin(),zeruj);//[](double){return 0.0;}
- //   std::transform(m_histY.begin(),m_histY.begin(),m_histY.begin(),zeruj);
+    //   std::transform(m_histU.begin(),m_histU.begin(),m_histU.begin(),zeruj);//[](double){return 0.0;}
+    //   std::transform(m_histY.begin(),m_histY.begin(),m_histY.begin(),zeruj);
     for(auto it=m_histU.begin();it!=m_histU.end();it++){
         *it = 0;
     }
@@ -182,8 +177,7 @@ std::vector<double> ObiektDyskretny::getLicznik(short ktory, std::string /*unuse
     }else{
         a = m_licznik2;
     }
-    auto it = a.begin();
-    a.insert(it,1.0);
+    wypisz_wielomiany();
     return a;
 
 }
@@ -194,6 +188,7 @@ std::vector<double> ObiektDyskretny::getMianownik(short ktory, std::string /*unu
     if(ktory==1){
         a = m_mianownik1;
     }else{
+
         a= m_mianownik2;
     }
     auto it = a.begin();
@@ -206,6 +201,25 @@ void ObiektDyskretny::setMomentPrzelaczenia(double t)
     m_momentPrzelaczenia = t;
     m_zmianaNaWielomian1 = true;
     m_zmianaNaWielomian2 = true;
+}
+double ObiektDyskretny::czas() const
+{
+    return m_czas;
+}
+
+void ObiektDyskretny::setCzas(double czas)
+{
+    m_czas = czas;
+}
+
+std::string ObiektDyskretny::id() const
+{
+    return m_id;
+}
+
+void ObiektDyskretny::setId(const std::string &id)
+{
+    m_id = id;
 }
 
 //##############################Maciek
@@ -402,11 +416,11 @@ void ObiektDyskretny::wczytajDane(std::string sciezka){
             }
         }
         doc.clear();
-//###########
-//        Dopisane przez Dominika
+        //###########
+        //        Dopisane przez Dominika
         m_zmianaNaWielomian1 = true;
         m_zmianaNaWielomian2 = true;
-//#############
+        //#############
     }catch(...){
         std::cout << "nie mozna znalezc ani utworzyc pliku" << std::endl;
     }

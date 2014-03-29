@@ -6,6 +6,7 @@
 #include "qkontrolersymulacji.h"
 #include<vector>
 #include<string>
+#include<map>
 class QString;
 
 namespace Ui {
@@ -31,9 +32,16 @@ signals:
     void resetSymulacji();
     void setWielomianMianownika(std::vector<double>,int ktory, std::string id);
     void setWielomianLicznika(std::vector<double>,int ktory, std::string id);
+    void setWariancja(double wariancja);
+    void getParameters();
 public slots:
     void odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u);
     void symulacjaZakonczona();
+    /*!
+     * \brief ustawDaneDlaUzytkownika
+     *Funkcja pozwala przedstawić dane obiektu na formatce
+     */
+    void ustawDaneDlaUzytkownika(QMap<QString, QVector<double> > m);
 
 
 private:
@@ -45,7 +53,7 @@ private:
     void ustawKontrolki();
     void setTextDlaKontrolekDouble(QLineEdit* edit, QString tekst);
     std::vector<double> convretQStringToDoubleVector(QString str);
-
+    QString stworzQStringWielomianu(QVector<double> &wielomian, int delay=0);
 //c//////////////////////////////////
 private slots:
     void on_actionSymulacja_ciagla_triggered();
@@ -71,6 +79,10 @@ private slots:
     void on_actionWczytaj_plik_triggered();
     void on_setWielomianLicznka_returnPressed();
     void on_setWielomianMianownika_returnPressed();
+    void on_resetujWykresy_clicked();
+    void on_setWariancja_returnPressed();
+    void on_wyborLicznika_valueChanged(int arg1);
+    void on_wyborMianownika_valueChanged(int arg1);
 };
 
 #endif // GUI_H

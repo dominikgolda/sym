@@ -4,14 +4,9 @@
 #include <vector>
 #include <deque>
 #include <random>
-
-#ifdef MACIEK
-#include "F:/programowanie/QTcreator/rapidxml-1.13/rapidxml.hpp"
-#include "F:/programowanie/QTcreator/rapidxml-1.13/rapidxml_print.hpp"
-#else
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
-#endif
+
 
 class ObiektDyskretny : public ObiektSiso
 {
@@ -81,13 +76,23 @@ public:
 
     std::vector<double> getLicznik(short ktory, std::string);
     std::vector<double>  getMianownik(short ktory, std::string);
+    double getWariancja(){return m_wariancja;}
     void setMomentPrzelaczenia(double t);
-
+    void setDelay(int d){m_delay = d;}
     void setDt(double dt){m_dh = dt;}
     double getDt(){return m_dh;}
     std::string getId(){return m_id;}
+    int getDelay() const {return m_delay;}
     //signals:
     //    void symulacjaZakonczona(std::pair<double,double> wynik);
+
+
+    double czas() const;
+    void setCzas(double czas);
+
+    std::string id() const;
+    void setId(const std::string &id);
+
 private:
     //pierwszy zestaw parametrów
     std::vector<double> m_licznik1;
