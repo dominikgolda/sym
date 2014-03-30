@@ -6,7 +6,7 @@
 #include "qkontrolersymulacji.h"
 #include<vector>
 #include<string>
-#include<map>
+#include<QMap>
 class QString;
 
 namespace Ui {
@@ -24,16 +24,17 @@ signals:
     void symulacjaCiagla();
     void symulacjaKrokowa();
     void symulacjaStop();
-    void setWymuszenie(std::vector<double> u);
-    void setDt(double dt);
-    void setPredkoscSymulacji(int prSym);
+//    void setWymuszenie(std::vector<double> u);
+//    void setDt(double dt);
+//    void setPredkoscSymulacji(int prSym);
     void openFile(QString str);
     void saveFile(QString str);
     void resetSymulacji();
-    void setWielomianMianownika(std::vector<double>,int ktory, std::string id);
-    void setWielomianLicznika(std::vector<double>,int ktory, std::string id);
-    void setWariancja(double wariancja);
+//    void setWielomianMianownika(std::vector<double>,int ktory, std::string id);
+//    void setWielomianLicznika(std::vector<double>,int ktory, std::string id);
+//    void setWariancja(double wariancja);
     void getParameters();
+    void setParameters(QMapaDanych m);
 public slots:
     void odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u);
     void symulacjaZakonczona();
@@ -41,7 +42,7 @@ public slots:
      * \brief ustawDaneDlaUzytkownika
      *Funkcja pozwala przedstawić dane obiektu na formatce
      */
-    void ustawDaneDlaUzytkownika(QMap<QString, QVector<double> > m);
+    void ustawDaneDlaUzytkownika(QMapaDanych m);
 
 
 private:
@@ -52,7 +53,7 @@ private:
     void ustawWykres();
     void ustawKontrolki();
     void setTextDlaKontrolekDouble(QLineEdit* edit, QString tekst);
-    std::vector<double> convretQStringToDoubleVector(QString str);
+    QVector<double> convretQStringToDoubleVector(QString str);
     QString stworzQStringWielomianu(QVector<double> &wielomian, int delay=0);
 //c//////////////////////////////////
 private slots:
@@ -81,8 +82,8 @@ private slots:
     void on_setWielomianMianownika_returnPressed();
     void on_resetujWykresy_clicked();
     void on_setWariancja_returnPressed();
-    void on_wyborLicznika_valueChanged(int arg1);
-    void on_wyborMianownika_valueChanged(int arg1);
+    void on_wyborLicznika_valueChanged(int);
+    void on_wyborMianownika_valueChanged(int);
 };
 
 #endif // GUI_H

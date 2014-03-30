@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     obiektdyskretny.cpp \
     qkontrolersymulacji.cpp \
     gui.cpp \
-    qvectorvalidator.cpp
+    qvectorvalidator.cpp \
+    badvariablenameexception.cpp
 
 HEADERS  += \
     qcustomplot.h \
@@ -27,7 +28,8 @@ HEADERS  += \
     qkontrolersymulacji.h \
     gui.h \
     stale.h \
-    qvectorvalidator.h
+    qvectorvalidator.h \
+    badvariablenameexception.h
 
 FORMS    += \
     gui.ui

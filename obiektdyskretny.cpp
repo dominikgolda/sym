@@ -26,12 +26,13 @@ ObiektDyskretny::ObiektDyskretny(const std::vector<double> &licznik1,
                                  int probkaPrzelaczenia, std::string id)
     :m_histU(licznik1.size()+delay),m_histY(mianownik1.size()-1)
 {
+    using namespace std::placeholders;
     m_id = id;
     m_licznik1 =licznik1;
     m_mianownik1 = mianownik1;
     if(m_mianownik1.at(0)!=1){
         //od m_mianownik1.begin() + 1 ponieważ mianownik[0] jest wykożystywany jako argument do mnożenia
-        std::transform(m_mianownik1.begin()+1, m_mianownik1.end(), m_mianownik1.begin(),std::bind1st(std::divides<double>(),m_mianownik1.at(0)));
+        std::transform(m_mianownik1.begin()+1, m_mianownik1.end(), m_mianownik1.begin()+1,std::bind(std::divides<double>(),_1,m_mianownik1.at(0)));
     }
     m_mianownik1.erase(m_mianownik1.begin(),m_mianownik1.begin()+1);
     m_delay = delay;
@@ -40,7 +41,7 @@ ObiektDyskretny::ObiektDyskretny(const std::vector<double> &licznik1,
     m_mianownik2 = mianownik2;
     if(m_mianownik2.at(0)!=1){
         //od m_mianownik2.begin() + 1 ponieważ mianownik[0] jest wykożystywany jako argument do mnożenia
-        std::transform(m_mianownik2.begin()+1, m_mianownik2.end(), m_mianownik2.begin(),std::bind1st(std::divides<double>(),m_mianownik2.at(0)));
+        std::transform(m_mianownik2.begin()+1, m_mianownik2.end(), m_mianownik2.begin()+1,std::bind(std::divides<double>(),_1,m_mianownik2.at(0)));
     }
     m_mianownik2.erase(m_mianownik2.begin(),m_mianownik2.begin()+1);
 
@@ -104,7 +105,7 @@ double ObiektDyskretny::symuluj(double u, double *czas){
 
 
 //s//////////////////       setLicznik         ///////////////////////////////////////////////
-void ObiektDyskretny::setLicznik(const std::vector<double> &dane, short ktory,std::string /*unused*/){
+void ObiektDyskretny::setLicznik(const std::vector<double> &dane, short ktory){
     //czy należy zmienić m_licznik1, czy m_licznik2
     if(ktory==1){
         //sprawdzam, czy licznik1 jest aktualnie wykorzysywany do wyznaczania wartości wyjścia.
@@ -124,14 +125,14 @@ void ObiektDyskretny::setLicznik(const std::vector<double> &dane, short ktory,st
     wypisz_wielomiany();
 }
 //s//////////////////       setMianownik       ///////////////////////////////////////////////
-void ObiektDyskretny::setMianownik(const std::vector<double> &dane, short ktory, std::string /*unused*/){
-
+void ObiektDyskretny::setMianownik(const std::vector<double> &dane, short ktory){
+    using namespace std::placeholders;
     //czy należy zmienić m_mianownik1, czy m_mianownik2
     if(ktory==1){
         m_mianownik1 = dane;
         if(m_mianownik1.at(0)!=1){
             //od m_mianownik1.begin() + 1 ponieważ mianownik[0] jest wykożystywany jako argument do mnożenia
-            std::transform(m_mianownik1.begin()+1, m_mianownik1.end(), m_mianownik1.begin(),std::bind1st(std::divides<double>(),m_mianownik1.at(0)));
+            std::transform(m_mianownik1.begin()+1, m_mianownik1.end(), m_mianownik1.begin()+1,std::bind(std::divides<double>(),_1,m_mianownik1.at(0)));
         }
         m_mianownik1.erase(m_mianownik1.begin(),m_mianownik1.begin()+1);
         //sprawdzam, czy licznik1 jest aktualnie wykorzysywany do wyznaczania wartości wyjścia.
@@ -143,7 +144,7 @@ void ObiektDyskretny::setMianownik(const std::vector<double> &dane, short ktory,
         m_mianownik2 = dane;
         if(m_mianownik2.at(0)!=1){
             //od m_mianownik1.begin() + 1 ponieważ mianownik[0] jest wykożystywany jako argument do mnożenia
-            std::transform(m_mianownik2.begin()+1, m_mianownik2.end(), m_mianownik2.begin(),std::bind1st(std::divides<double>(),m_mianownik2.at(0)));
+            std::transform(m_mianownik2.begin()+1, m_mianownik2.end(), m_mianownik2.begin()+1,std::bind(std::divides<double>(),_1,m_mianownik2.at(0)));
         }
         m_mianownik2.erase(m_mianownik2.begin(),m_mianownik2.begin()+1);
         if(m_momentPrzelaczenia>m_epsilon && m_momentPrzelaczenia<=m_czas){
@@ -159,8 +160,6 @@ void ObiektDyskretny::setMianownik(const std::vector<double> &dane, short ktory,
 
 void ObiektDyskretny::resetujSymulacje()
 {
-    //   std::transform(m_histU.begin(),m_histU.begin(),m_histU.begin(),zeruj);//[](double){return 0.0;}
-    //   std::transform(m_histY.begin(),m_histY.begin(),m_histY.begin(),zeruj);
     for(auto it=m_histU.begin();it!=m_histU.end();it++){
         *it = 0;
     }
@@ -169,7 +168,7 @@ void ObiektDyskretny::resetujSymulacje()
     }
 }
 
-std::vector<double> ObiektDyskretny::getLicznik(short ktory, std::string /*unused*/)
+std::vector<double> ObiektDyskretny::getLicznik(short ktory)
 {
     std::vector<double> a;
     if(ktory==1){
@@ -182,7 +181,7 @@ std::vector<double> ObiektDyskretny::getLicznik(short ktory, std::string /*unuse
 
 }
 
-std::vector<double> ObiektDyskretny::getMianownik(short ktory, std::string /*unused*/)
+std::vector<double> ObiektDyskretny::getMianownik(short ktory)
 {
     std::vector<double> a;
     if(ktory==1){

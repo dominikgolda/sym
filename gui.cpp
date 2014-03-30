@@ -7,7 +7,7 @@
 #include<map>
 #include "stale.h"
 #include "qvectorvalidator.h"
-
+#include "badvariablenameexception.h"
 
 //s////////////////////////////////////////////////////////////
 //s//////////      Konstruktor               //////////////////
@@ -32,30 +32,28 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
     connect(this,SIGNAL(openFile(QString)),kontroler,SLOT(openFile(QString)));
     connect(this,SIGNAL(saveFile(QString)),kontroler,SLOT(saveFile(QString)));
 
-
+    //odbiór danych
     connect(kontroler,SIGNAL(wynikSymulacji(QVector<double>,QVector<double>,QVector<double>)),this,SLOT(odbierzWyniki(QVector<double>,QVector<double>,QVector<double>)));
+    connect(kontroler,SIGNAL(wyslijDaneObiektu(QMapaDanych)),this,SLOT(ustawDaneDlaUzytkownika(QMapaDanych)));
+    //informacje z obiektu
     connect(kontroler,SIGNAL(symulacjaZakonczona()),this,SLOT(symulacjaZakonczona()));
-    connect(kontroler,SIGNAL(wyslijDaneObiektu(QMap<QString,QVector<double> >)),this,SLOT(ustawDaneDlaUzytkownika(QMap<QString,QVector<double> >)));
 
-
-
+    //rządanie wysłania danych
     connect(this,SIGNAL(getParameters()),kontroler,SLOT(getParameters()));
+    //wysyłanie ustawień do obiektu
+    connect(this,SIGNAL(setParameters(QMapaDanych)),kontroler,SLOT(odbierzDaneObiektu(QMapaDanych)));
 
-    connect(this,SIGNAL(setWymuszenie(std::vector<double>)),kontroler,SLOT(setWymuszenie(std::vector<double>)));
-    connect(this,SIGNAL(setDt(double)),kontroler,SLOT(setDt(double)));
-    connect(this,SIGNAL(setPredkoscSymulacji(int)),kontroler,SLOT(setPredkoscSymulacji(int)));
-    connect(this,SIGNAL(setWielomianLicznika(std::vector<double>,int,std::string)),kontroler,SLOT(setWielomianLicznika(std::vector<double>,int,std::string)));
-    connect(this,SIGNAL(setWielomianMianownika(std::vector<double>,int,std::string)),kontroler,SLOT(setWielomianMianownik(std::vector<double>,int,std::string)));
-    connect(this,SIGNAL(setWariancja(double)),kontroler,SLOT(setWariancja(double)));
+    //wysyłanie ustawień do obiektu
+//    connect(this,SIGNAL(setWymuszenie(std::vector<double>)),kontroler,SLOT(setWymuszenie(std::vector<double>)));
+//    connect(this,SIGNAL(setDt(double)),kontroler,SLOT(setDt(double)));
+//    connect(this,SIGNAL(setWielomianLicznika(std::vector<double>,int,std::string)),kontroler,SLOT(setWielomianLicznika(std::vector<double>,int,std::string)));
+//    connect(this,SIGNAL(setWielomianMianownika(std::vector<double>,int,std::string)),kontroler,SLOT(setWielomianMianownik(std::vector<double>,int,std::string)));
+//    connect(this,SIGNAL(setWariancja(double)),kontroler,SLOT(setWariancja(double)));
 
 
-
-    std::vector<double>a={1};
-    emit setWymuszenie(a);
-    m_ui->labelSterowanie->setText(QString::number(1));
-    setTextDlaKontrolekDouble(m_ui->setWZadana,QString::number(1));
-    setTextDlaKontrolekDouble(m_ui->setDh,QString::number(0.1));
-    m_ui->setPrSym->setValue(1);
+    //wymuszenie skok jednostkowy
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_wZadana",1));
+    //ustawienie tekstów w kontrolkach zgodnie z zawartością obiektu
     emit getParameters();
 }
 
@@ -105,7 +103,7 @@ void Gui::symulacjaZakonczona()
 ///
 /// \param m - mapa postaci klucz parametru <=> vector doubli. Klucz parametru odpowiada nazwie pól
 ///klasy QObiektDyskretny. W przyszłości można będzie rozbudować mapę o parametry regulatorów.
-void Gui::ustawDaneDlaUzytkownika(QMap<QString, QVector<double> >m)
+void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
 {
 
     QString pom;
@@ -280,10 +278,10 @@ void Gui::setTextDlaKontrolekDouble(QLineEdit *edit,QString tekst)
 /// \param str - QString który ma być przetworzony
 /// \return std::vector<double> odpowiadający stringowi
 ///
-std::vector<double> Gui::convretQStringToDoubleVector(QString str)
+QVector<double> Gui::convretQStringToDoubleVector(QString str)
 {
     QTextStream strumien(&str);
-    std::vector<double> vec;
+    QVector<double> vec;
     double pom;
     while(!strumien.atEnd()){
         strumien>>pom;
@@ -357,23 +355,23 @@ void Gui::on_actionWczytaj_plik_triggered()
 
 void Gui::on_setWZadana_returnPressed()
 {
-    std::vector<double> vec;
+    QVector<double> vec;
     vec.push_back(m_ui->setWZadana->text().toDouble());
-    emit setWymuszenie(vec);
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_wZadana",vec));
+
 }
 
 //s//////////         krok symulacji <=> Dh           /////////
 void Gui::on_setDh_returnPressed()
 {
-    double pom;
-    pom = m_ui->setDh->text().toDouble();
-    emit setDt(pom);
+    double pom = m_ui->setDh->text().toDouble();
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_dh",pom));
 }
 
 //s//////////        prędkość symulacji               /////////
 void Gui::on_setPrSym_valueChanged(int arg1)
 {
-    emit setPredkoscSymulacji(arg1);
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_predkoscSymulacji",static_cast<double>(arg1)));
 }
 
 
@@ -384,7 +382,13 @@ void Gui::on_setPrSym_valueChanged(int arg1)
 //s//////////        resetuj symulację                /////////
 void Gui::on_resetujSymulacje_clicked()
 {
+    //usunięcie danych z obiektu
     resetSymulacji();
+    //zresetowanie wykresu
+    on_resetujWykresy_clicked();
+    //wyzerowanie czasu symulacji
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_czas",0));
+
 }
 
 //s//////////        symulacja ciągła                 /////////
@@ -415,35 +419,47 @@ void Gui::on_symKrokowa_clicked()
 
 void Gui::on_setWielomianLicznka_returnPressed()
 {
-    std::vector<double> a = convretQStringToDoubleVector(m_ui->setWielomianLicznka->text());
+    QVector<double>  a = convretQStringToDoubleVector(m_ui->setWielomianLicznka->text());
     if(!a.empty()){
-        emit setWielomianLicznika(a,m_ui->wyborLicznika->value(),"");
+        if(m_ui->wyborMianownika->value()==1){
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_licznik1",a));
+        }else if(m_ui->wyborMianownika->value()==2){
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_licznik2",a));
+        }
     }
+    emit getParameters();
 }
 
 
 void Gui::on_setWielomianMianownika_returnPressed()
 {
-    std::vector<double> a = convretQStringToDoubleVector(m_ui->setWielomianMianownika->text());
+    QVector<double> a = convretQStringToDoubleVector(m_ui->setWielomianMianownika->text());
+    //czy wektor nie jest pusty
     if(!a.empty()){
-        emit setWielomianMianownika(a,m_ui->wyborMianownika->value(),"");
+        //który licznik należy ustawić
+        if(m_ui->wyborMianownika->value()==1){
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_mianownik1",a));
+        }else if(m_ui->wyborMianownika->value()==2){
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_mianownik2",a));
+        }
     }
+    emit getParameters();
 }
 
 
 void Gui::on_setWariancja_returnPressed()
 {
     double pom = m_ui->setWariancja->text().toDouble();
-    emit setWariancja(pom);
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych("m_wariancja",pom));
 }
 
 
-void Gui::on_wyborLicznika_valueChanged(int arg1)
+void Gui::on_wyborLicznika_valueChanged(int)
 {
    emit getParameters();
 }
 
-void Gui::on_wyborMianownika_valueChanged(int arg1)
+void Gui::on_wyborMianownika_valueChanged(int)
 {
     emit getParameters();
 }

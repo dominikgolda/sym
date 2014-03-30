@@ -51,7 +51,7 @@ public:
      *
      *Jeżeli funkcja setLicznik jest używana dla licznika, który jest obecnie stosowany do wyznaczaniaFunkcja setLicznik w razie wywołania z vektorem o długości innej niż obecnie używany zmienia długość kolejki próbek wejściowych m_histU. W przypadku skracania wektora usówane są ostatnie próbki. W przypadku wydłużania wektora na końcu dopisywane są zera.
      */
-    void setLicznik(const std::vector<double> &dane, short ktory=1,std::string id=""/*unused*/);
+    void setLicznik(const std::vector<double> &dane, short ktory=1);
     /*!
      * \brief setMianownik
      * \param dane -wektor z danymi dane(0) - b0 dane(N) - bN, jest przesówany
@@ -62,22 +62,23 @@ public:
      *obsługującym połączenia ObiektówDyskretnych w celu wyboru obiektu, do którego
      *należy przypisać dane.
      */
-    void setMianownik(const std::vector<double> &dane, short ktory=1, std::string ="");
+    void setMianownik(const std::vector<double> &dane, short ktory=1);
     /*!
      * \brief setVariancja
      * \param w - wartość wariancji, jaką należy ustawić dla obiektu
      * \param ktory_obiekt - nie wykorzystywany w klasie ObiektDyskretny, ale w
      *kompozycie @@@ jakim @@@, żeby określić który obiekt ma zostać zmieniony
      */
-    void setWariancja(double w,std::string /*unused*/){m_wariancja=w;}
+    void setWariancja(double w){m_wariancja=w;}
 
     virtual void resetujSymulacje();
 
 
-    std::vector<double> getLicznik(short ktory, std::string);
-    std::vector<double>  getMianownik(short ktory, std::string);
+    std::vector<double> getLicznik(short ktory);
+    std::vector<double>  getMianownik(short ktory);
     double getWariancja(){return m_wariancja;}
     void setMomentPrzelaczenia(double t);
+    double getMomentPrzelaczenia() const {return m_momentPrzelaczenia;}
     void setDelay(int d){m_delay = d;}
     void setDt(double dt){m_dh = dt;}
     double getDt(){return m_dh;}
@@ -104,7 +105,7 @@ private:
     std::deque<double>m_histU;
     std::deque<double>m_histY;
     //moment zmiany z współczynników wielomianu. Drugi zestaw parametrów jest wykorzystywany od momentu kiedy m_probka==m_probkaPrzelaczenia
-    int m_momentPrzelaczenia = 0;
+    double m_momentPrzelaczenia = 0;
     //z^-k z modelu obiektu
     int m_delay = 0;
     //czas symulacji
