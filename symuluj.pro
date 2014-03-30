@@ -16,10 +16,9 @@ SOURCES += main.cpp\
     qcustomplot/qcustomplot.cpp \
     obiektsiso.cpp \
     obiektdyskretny.cpp \
-    qkontrolersymulacji.cpp \
     gui.cpp \
     qvectorvalidator.cpp \
-    badvariablenameexception.cpp
+    qkontrolersymulacji.cpp
 
 HEADERS  += \
     qcustomplot.h \
@@ -28,8 +27,7 @@ HEADERS  += \
     qkontrolersymulacji.h \
     gui.h \
     stale.h \
-    qvectorvalidator.h \
-    badvariablenameexception.h
+    qvectorvalidator.h
 
 FORMS    += \
     gui.ui

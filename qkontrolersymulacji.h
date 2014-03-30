@@ -9,7 +9,10 @@
 #include <QMap>
 #include <QSet>
 #include <set>
-typedef QMap<QString,QVector<double>> QMapaDanych;
+//enum class globalNazwyZmiennych  {m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_przedkoscSymulacji};
+
+enum class m_dopuszczalneNazwyZmiennych{m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_predkoscSymulacji};
+typedef QMap<m_dopuszczalneNazwyZmiennych,QVector<double>> QMapaDanych;
 
 class QString;
 class ObiektDyskretny;
@@ -17,6 +20,7 @@ class QKontrolerSymulacji : public QObject
 {
     Q_OBJECT
 public:
+    //przechowuje nazwy akceptowane przez wyslijDaneObiektu i odbierzDaneObiektu
     //c/////////////////////////////////////////////////////////
     //c//////////      konstruktor     ////////////////////
     //c/////////////////////////////////////////////////////////
@@ -30,8 +34,8 @@ public:
     //c/////////////////////////////////////////////////////////
     //c//////////      SYGNAŁY              ////////////////////
     //c/////////////////////////////////////////////////////////
-    static QMapaDanych stworzQMapeDanych(const char *tab, QVector<double> vec);
-    static QMapaDanych stworzQMapeDanych(const char *tab, double wart);
+    static QMapaDanych stworzQMapeDanych(const m_dopuszczalneNazwyZmiennych klucz, QVector<double> vec);
+    static QMapaDanych stworzQMapeDanych(const m_dopuszczalneNazwyZmiennych klucz, double wart);
  signals:
     ///
     /// \brief symulacjaZakonczona - wysyłany jeżeli skończyła się sekwencja próbek podanych na wejście, lub jeżeli była ona pusta
@@ -153,8 +157,6 @@ private:
     //tworzenie mapy danych do przesłania do gui
     void zbierzDaneDoprzeslania();
 
-    //przechowuje nazwy akceptowane przez wyslijDaneObiektu i odbierzDaneObiektu
-    const static std::set<QString> m_dopuszczalneNazwyZmiennych;// = {"m_wZadana","m_licznik1","m_licznik2","m_mianownik1","m_mianownik2","m_wariancja","m_dh","m_delay","m_momentPrzelaczenia","m_czas","m_przedkoscSymulacji"};
-//const static std::set<QString> m_dopuszczalneNazwyZmiennych = {"m_wZadana","m_licznik1","m_licznik2","m_mianownik1","m_mianownik2","m_wariancja","m_dh","m_delay","m_momentPrzelaczenia","m_czas","m_przedkoscSymulacji"};
+    //const static std::set<QString> m_dopuszczalneNazwyZmiennych = {"m_wZadana","m_licznik1","m_licznik2","m_mianownik1","m_mianownik2","m_wariancja","m_dh","m_delay","m_momentPrzelaczenia","m_czas","m_przedkoscSymulacji"};
 };
 #endif // QKONTROLERSYMULACJI_H
