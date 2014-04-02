@@ -18,7 +18,16 @@ SOURCES += main.cpp\
     obiektdyskretny.cpp \
     gui.cpp \
     qvectorvalidator.cpp \
-    qkontrolersymulacji.cpp
+    qkontrolersymulacji.cpp \
+    dekorator/dekorator.cpp \
+    dekorator/komponent.cpp \
+    dekorator/dekorujtrojkatem.cpp \
+    dekorator/dekorujstala.cpp \
+    dekorator/dekorujsinusem.cpp \
+    dekorator/dekorujprostokatem.cpp \
+    dekorator/komponentkonkretny.cpp \
+    regulator/kompozytobiektow.cpp \
+    regulator/regulator.cpp
 
 HEADERS  += \
     qcustomplot.h \
@@ -27,7 +36,16 @@ HEADERS  += \
     qkontrolersymulacji.h \
     gui.h \
     stale.h \
-    qvectorvalidator.h
+    qvectorvalidator.h \
+    dekorator/dekorujtrojkatem.h \
+    dekorator/dekorujstala.h \
+    dekorator/dekorujsinusem.h \
+    dekorator/dekorujprostokatem.h \
+    dekorator/dekorator.h \
+    dekorator/komponent.h \
+    dekorator/komponentkonkretny.h \
+    regulator/kompozytobiektow.h \
+    regulator/regulator.h
 
 FORMS    += \
     gui.ui
