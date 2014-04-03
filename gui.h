@@ -7,6 +7,7 @@
 #include<vector>
 #include<string>
 #include<QMap>
+#include "stale.h"
 class QString;
 
 namespace Ui {

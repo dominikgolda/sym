@@ -24,11 +24,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Symulacja</string>
      </attribute>
      <widget class="QLabel" name="label">
       <property name="geometry">
@@ -238,7 +238,7 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Obiekt</string>
      </attribute>
      <widget class="QLineEdit" name="setWariancja">
       <property name="geometry">
@@ -380,18 +380,11 @@
        <number>2</number>
       </property>
      </widget>
-     <zorder>tabWidget</zorder>
-     <zorder>setWariancja</zorder>
-     <zorder>label_3</zorder>
-     <zorder>wyborMianownika</zorder>
-     <zorder>setWielomianMianownika</zorder>
-     <zorder>labelWariancja</zorder>
-     <zorder>label_8</zorder>
-     <zorder>labelWielomianLicznika</zorder>
-     <zorder>labelWielomianMianownika</zorder>
-     <zorder>label_9</zorder>
-     <zorder>setWielomianLicznka</zorder>
-     <zorder>wyborLicznika</zorder>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Regulator</string>
+     </attribute>
     </widget>
    </widget>
    <widget class="QCustomPlot" name="m_wykrWyjWartZad" native="true">
@@ -403,7 +396,6 @@
       <height>251</height>
      </rect>
     </property>
-    <zorder>tabWidget_2</zorder>
    </widget>
    <widget class="QCustomPlot" name="m_wykrSter" native="true">
     <property name="geometry">

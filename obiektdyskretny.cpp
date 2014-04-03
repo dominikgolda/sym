@@ -426,7 +426,7 @@ void ObiektDyskretny::wczytajDane(std::string sciezka){
 
 }
 
-void ObiektDyskretny::zapiszDane(std::string sciezka, std::string nazwa_obiektu){
+void ObiektDyskretny::zapiszDane(std::string sciezka, std::string nazwa_obiektu = "ObiektDyskretny"){
     try{
 
         // utworzenie pustego xmla w pamieci

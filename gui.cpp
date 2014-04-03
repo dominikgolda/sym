@@ -52,7 +52,7 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
 
 
     //wymuszenie skok jednostkowy
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_wZadana,1));
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_wZadana,1));
     //ustawienie tekstów w kontrolkach zgodnie z zawartością obiektu
     emit getParameters();
 }
@@ -106,16 +106,16 @@ void Gui::symulacjaZakonczona()
 void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
 {
 
-    m_dopuszczalneNazwyZmiennych pom;
+    globalDopuszczalneNazwyZmiennych pom;
     auto it = m.begin();
 
-    pom = m_dopuszczalneNazwyZmiennych::m_wZadana;
+    pom = globalDopuszczalneNazwyZmiennych::m_wZadana;
     it = m.find(pom);
     if(it!=m.end()){
         setTextDlaKontrolekDouble(m_ui->setWZadana,QString::number(it.value()[0]));
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_dh;
+    pom = globalDopuszczalneNazwyZmiennych::m_dh;
     it = m.find(pom);
     if(it!=m.end()){
         setTextDlaKontrolekDouble(m_ui->setDh,QString::number(it.value()[0]));
@@ -123,19 +123,19 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
 
     //do przechowywania opóźnienia - potrzebne w kilku miejscach
     int localDelay=0;
-    pom = m_dopuszczalneNazwyZmiennych::m_delay;
+    pom = globalDopuszczalneNazwyZmiennych::m_delay;
     it = m.find(pom);
     if(it!=m.end()){
         localDelay = static_cast<int>(it.value().at(0));
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_predkoscSymulacji;
+    pom = globalDopuszczalneNazwyZmiennych::m_predkoscSymulacji;
     it = m.find(pom);
     if(it!=m.end()){
         m_ui->setPrSym->setValue(it.value().at(0));
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_licznik1;
+    pom = globalDopuszczalneNazwyZmiennych::m_licznik1;
     it = m.find(pom);
     if(it!=m.end()){
         if(m_ui->wyborLicznika->value()==1){
@@ -143,7 +143,7 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
         }
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_licznik2;
+    pom = globalDopuszczalneNazwyZmiennych::m_licznik2;
     it = m.find(pom);
     if(it!=m.end()){
         if(m_ui->wyborLicznika->value()==2){
@@ -151,7 +151,7 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
         }
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_mianownik1;
+    pom = globalDopuszczalneNazwyZmiennych::m_mianownik1;
     it = m.find(pom);
     if(it!=m.end()){
         if(m_ui->wyborMianownika->value()==1){
@@ -159,7 +159,7 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
         }
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_mianownik2;
+    pom = globalDopuszczalneNazwyZmiennych::m_mianownik2;
     it = m.find(pom);
     if(it!=m.end()){
         if(m_ui->wyborMianownika->value()==2){
@@ -167,7 +167,7 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
         }
     }
 
-    pom = m_dopuszczalneNazwyZmiennych::m_wariancja;
+    pom = globalDopuszczalneNazwyZmiennych::m_wariancja;
     it = m.find(pom);
     if(it!=m.end()){
         setTextDlaKontrolekDouble(m_ui->setWariancja,QString::number(it.value()[0]));
@@ -357,7 +357,7 @@ void Gui::on_setWZadana_returnPressed()
 {
     QVector<double> vec;
     vec.push_back(m_ui->setWZadana->text().toDouble());
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_wZadana,vec));
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_wZadana,vec));
 
 }
 
@@ -365,13 +365,13 @@ void Gui::on_setWZadana_returnPressed()
 void Gui::on_setDh_returnPressed()
 {
     double pom = m_ui->setDh->text().toDouble();
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_dh,pom));
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_dh,pom));
 }
 
 //s//////////        prędkość symulacji               /////////
 void Gui::on_setPrSym_valueChanged(int arg1)
 {
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_predkoscSymulacji,static_cast<double>(arg1)));
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_predkoscSymulacji,static_cast<double>(arg1)));
 }
 
 
@@ -387,7 +387,7 @@ void Gui::on_resetujSymulacje_clicked()
     //zresetowanie wykresu
     on_resetujWykresy_clicked();
     //wyzerowanie czasu symulacji
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_czas,0));
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_czas,0));
 
 }
 
@@ -422,9 +422,9 @@ void Gui::on_setWielomianLicznka_returnPressed()
     QVector<double>  a = convretQStringToDoubleVector(m_ui->setWielomianLicznka->text());
     if(!a.empty()){
         if(m_ui->wyborMianownika->value()==1){
-            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_licznik1,a));
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_licznik1,a));
         }else if(m_ui->wyborMianownika->value()==2){
-            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_licznik2,a));
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_licznik2,a));
         }
     }
     emit getParameters();
@@ -438,9 +438,9 @@ void Gui::on_setWielomianMianownika_returnPressed()
     if(!a.empty()){
         //który licznik należy ustawić
         if(m_ui->wyborMianownika->value()==1){
-            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_mianownik1,a));
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_mianownik1,a));
         }else if(m_ui->wyborMianownika->value()==2){
-            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_mianownik2,a));
+            emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_mianownik2,a));
         }
     }
     emit getParameters();
@@ -450,7 +450,7 @@ void Gui::on_setWielomianMianownika_returnPressed()
 void Gui::on_setWariancja_returnPressed()
 {
     double pom = m_ui->setWariancja->text().toDouble();
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(m_dopuszczalneNazwyZmiennych::m_wariancja,pom));
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(globalDopuszczalneNazwyZmiennych::m_wariancja,pom));
 }
 
 
