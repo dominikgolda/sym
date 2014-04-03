@@ -175,11 +175,11 @@ void QKontrolerSymulacji::saveFile(QString str)
 //s////////////////////////////////////////////////////////////
 void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
 {
-    globalDopuszczalneNazwyZmiennych pom;
+    DopuszczalneNazwyZmiennych pom;
     auto it = m.begin();
 
     //wektor wymuszeń
-    pom = globalDopuszczalneNazwyZmiennych::m_wZadana;
+    pom = DopuszczalneNazwyZmiennych::m_wZadana;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -187,7 +187,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
     //wielomiany licznika
-    pom = globalDopuszczalneNazwyZmiennych::m_licznik1;
+    pom = DopuszczalneNazwyZmiennych::m_licznik1;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -195,7 +195,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
      }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_licznik2;
+    pom = DopuszczalneNazwyZmiennych::m_licznik2;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -203,7 +203,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_mianownik1;
+    pom = DopuszczalneNazwyZmiennych::m_mianownik1;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -211,14 +211,14 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_mianownik2;
+    pom = DopuszczalneNazwyZmiennych::m_mianownik2;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
             m_ob->setMianownik(it.value().toStdVector(),2);
         }
     }
-    pom = globalDopuszczalneNazwyZmiennych::m_wariancja;
+    pom = DopuszczalneNazwyZmiennych::m_wariancja;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -227,7 +227,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
     }
 
     //czas próbkowania
-    pom = globalDopuszczalneNazwyZmiennych::m_dh;
+    pom = DopuszczalneNazwyZmiennych::m_dh;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -235,7 +235,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_delay;
+    pom = DopuszczalneNazwyZmiennych::m_delay;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -243,7 +243,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_momentPrzelaczenia;
+    pom = DopuszczalneNazwyZmiennych::m_momentPrzelaczenia;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -251,7 +251,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_czas;
+    pom = DopuszczalneNazwyZmiennych::m_czas;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -259,7 +259,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 
-    pom = globalDopuszczalneNazwyZmiennych::m_predkoscSymulacji;
+    pom = DopuszczalneNazwyZmiennych::m_predkoscSymulacji;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -341,43 +341,43 @@ void QKontrolerSymulacji::zbierzDaneDoprzeslania()
     QVector<double> pom;
 
     pom.push_back(m_u.at(static_cast<double>(m_licznikProbek)));
-    m[globalDopuszczalneNazwyZmiennych::m_wZadana] = pom;
+    m[DopuszczalneNazwyZmiennych::m_wZadana] = pom;
     pom.clear();
 
     pom.push_back(m_ob->getDt());
-    m[globalDopuszczalneNazwyZmiennych::m_dh] = pom;
+    m[DopuszczalneNazwyZmiennych::m_dh] = pom;
     pom.clear();
 
     pom.push_back(static_cast<double>(m_ob->getDelay()));
-    m[globalDopuszczalneNazwyZmiennych::m_delay] = pom;
+    m[DopuszczalneNazwyZmiennych::m_delay] = pom;
     pom.clear();
 
     pom.push_back(m_predkoscSymulacji);
-    m[globalDopuszczalneNazwyZmiennych::m_predkoscSymulacji] = pom;
+    m[DopuszczalneNazwyZmiennych::m_predkoscSymulacji] = pom;
     pom.clear();
 
     pom = QVector<double>::fromStdVector(m_ob->getLicznik(1));
-    m[globalDopuszczalneNazwyZmiennych::m_licznik1] = pom;
+    m[DopuszczalneNazwyZmiennych::m_licznik1] = pom;
     pom.clear();
 
     pom = QVector<double>::fromStdVector(m_ob->getLicznik(2));
-    m[globalDopuszczalneNazwyZmiennych::m_licznik2] = pom;
+    m[DopuszczalneNazwyZmiennych::m_licznik2] = pom;
     pom.clear();
 
     pom = QVector<double>::fromStdVector(m_ob->getMianownik(1));
-    m[globalDopuszczalneNazwyZmiennych::m_mianownik1] = pom;
+    m[DopuszczalneNazwyZmiennych::m_mianownik1] = pom;
     pom.clear();
 
     pom = QVector<double>::fromStdVector(m_ob->getMianownik(2));
-    m[globalDopuszczalneNazwyZmiennych::m_mianownik2] = pom;
+    m[DopuszczalneNazwyZmiennych::m_mianownik2] = pom;
     pom.clear();
 
     pom.push_back(m_ob->getWariancja());
-    m[globalDopuszczalneNazwyZmiennych::m_wariancja] = pom;
+    m[DopuszczalneNazwyZmiennych::m_wariancja] = pom;
     pom.clear();
 
     pom.push_back(m_ob->czas());
-    m[globalDopuszczalneNazwyZmiennych::m_czas] = pom;
+    m[DopuszczalneNazwyZmiennych::m_czas] = pom;
     pom.clear();
 
     emit wyslijDaneObiektu(m);
@@ -399,14 +399,14 @@ QKontrolerSymulacji::~QKontrolerSymulacji()
     std::cout<<"Jestem w destruktorze QKontrolerSymulacji"<<std::endl;
 }
 
-QMapaDanych QKontrolerSymulacji::stworzQMapeDanych(const globalDopuszczalneNazwyZmiennych klucz, QVector<double> vec)
+QMapaDanych QKontrolerSymulacji::stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, QVector<double> vec)
 {
         QMapaDanych m;
         m[klucz] = vec;
         return m;
 }
 
-QMapaDanych QKontrolerSymulacji::stworzQMapeDanych(const globalDopuszczalneNazwyZmiennych klucz, double wart)
+QMapaDanych QKontrolerSymulacji::stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, double wart)
 {
     QVector<double> vec;
     vec.push_back(wart);

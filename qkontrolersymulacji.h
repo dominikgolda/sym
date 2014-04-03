@@ -11,9 +11,9 @@
 #include <set>
 #include "stale.h"
 //enum class globalNazwyZmiennych  {m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_przedkoscSymulacji};
-enum class globalDopuszczalneNazwyZmiennych{m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_predkoscSymulacji};
+enum class DopuszczalneNazwyZmiennych{m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_predkoscSymulacji,m_wzmocnienie};
 
-typedef QMap<globalDopuszczalneNazwyZmiennych,QVector<double>> QMapaDanych;
+typedef QMap<DopuszczalneNazwyZmiennych,QVector<double>> QMapaDanych;
 
 class QString;
 class ObiektDyskretny;
@@ -35,8 +35,8 @@ public:
     //c/////////////////////////////////////////////////////////
     //c//////////      SYGNAŁY              ////////////////////
     //c/////////////////////////////////////////////////////////
-    static QMapaDanych stworzQMapeDanych(const globalDopuszczalneNazwyZmiennych klucz, QVector<double> vec);
-    static QMapaDanych stworzQMapeDanych(const globalDopuszczalneNazwyZmiennych klucz, double wart);
+    static QMapaDanych stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, QVector<double> vec);
+    static QMapaDanych stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, double wart);
  signals:
     ///
     /// \brief symulacjaZakonczona - wysyłany jeżeli skończyła się sekwencja próbek podanych na wejście, lub jeżeli była ona pusta

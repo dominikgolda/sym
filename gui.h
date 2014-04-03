@@ -85,6 +85,7 @@ private slots:
     void on_setWariancja_returnPressed();
     void on_wyborLicznika_valueChanged(int);
     void on_wyborMianownika_valueChanged(int);
+    void on_setWzmocnienie_returnPressed();
 };
 
 #endif // GUI_H

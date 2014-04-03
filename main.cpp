@@ -5,6 +5,7 @@
 #include "qkontrolersymulacji.h"
 #include "obiektdyskretny.h"
 #include "gui.h"
+#include "regulator/regulatorp.h"
 #include<memory>
 int main(int argc, char *argv[])
 {
