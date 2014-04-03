@@ -10,11 +10,13 @@
 #include <QSet>
 #include <set>
 #include "stale.h"
+
 //enum class globalNazwyZmiennych  {m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_przedkoscSymulacji};
 enum class DopuszczalneNazwyZmiennych{m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_predkoscSymulacji,m_wzmocnienie};
 
 typedef QMap<DopuszczalneNazwyZmiennych,QVector<double>> QMapaDanych;
 
+class PetlaRegulacji;
 class QString;
 class ObiektDyskretny;
 class QKontrolerSymulacji : public QObject
@@ -26,7 +28,7 @@ public:
     //c//////////      konstruktor     ////////////////////
     //c/////////////////////////////////////////////////////////
 
-    explicit QKontrolerSymulacji(ObiektDyskretny* kontrolowany,QObject *parent = 0);
+    explicit QKontrolerSymulacji(ObiektDyskretny* kontrolowany, PetlaRegulacji *petla, QObject *parent = 0);
     //c/////////////////////////////////////////////////////////
     //c//////////      destruktor     ////////////////////
     //c/////////////////////////////////////////////////////////
@@ -142,6 +144,8 @@ private:
     int m_predkoscSymulacji = 1;
 
     ObiektDyskretny *m_ob=NULL;
+
+    PetlaRegulacji *m_petla = NULL;
 
     //wektory do przechowywania punktów pomiędzy odświeżeniami wykresu/wysłaniami sygnału  wynikiSymulacji
     QVector<double> m_histU;

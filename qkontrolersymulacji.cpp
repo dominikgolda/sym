@@ -5,17 +5,18 @@
 #include<QVector>
 #include<memory>
 #include"obiektdyskretny.h"
+#include"regulator/petlaregulacji.h"
 #include<iostream>
 #include<QMessageBox>
 #include<string>
-#define DEBUG
 
-QKontrolerSymulacji::QKontrolerSymulacji(ObiektDyskretny *kontrolowany, QObject *parent) :
+
+QKontrolerSymulacji::QKontrolerSymulacji(ObiektDyskretny *kontrolowany,PetlaRegulacji *petla, QObject *parent) :
     QObject(parent)
 {
     //timer kontrolujący symulację
     QObject::connect(&m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
-
+    m_petla = petla;
     m_ob = kontrolowany;
 }
 
@@ -73,15 +74,13 @@ void QKontrolerSymulacji::symulacjaKrokowa(){
     symulacjaCiaglaStop();
     m_symuluj();
     m_wyslijWynikiSymulacji();
-#ifdef DEBUG
-    zbierzDaneDoprzeslania();
-#endif
+
 }
 
 //s////////// reset ////////////////////////
 void QKontrolerSymulacji::resetSymulacji()
 {
-    m_ob->resetujSymulacje();
+    m_petla->resetujSymulacje();
 }
 
 
@@ -99,22 +98,23 @@ void QKontrolerSymulacji::onTimeout(){
 
 //s////////// m_symuluj - właściwa funkcja symulująca ///////////////////
 void QKontrolerSymulacji::m_symuluj(){
-    if(m_ob!=NULL){
+    if(m_petla!=NULL){
         //odpowiedź na skok jednostkowy
         if(m_u.size()==1){
             double czas;
             //symulacja
-            double y = m_ob->symuluj(m_u.at(0),&czas);
+            double y = m_petla->symuluj(m_u.at(0),&czas);
+            double u = m_petla->getWartoscZadanaValue();
             //przechowywanie danych do przesłania
             m_histT.push_back(czas);
-            m_histU.push_back(m_u.at(0));
+            m_histU.push_back(u);
             m_histY.push_back(y);
         }
         //odpowiedź na zadaną sekwencję wejść
         else if(m_u.size()>m_licznikProbek){
             double czas;
             //symulacja
-            double y = m_ob->symuluj(m_u.at(m_licznikProbek),&czas);
+            double y = m_petla->symuluj(m_u.at(m_licznikProbek),&czas);
             //przechowywanie danych do przesłania
             m_histT.push_back(czas);
             m_histU.push_back(m_u.at(m_licznikProbek));
@@ -155,7 +155,7 @@ void QKontrolerSymulacji::m_wyslijWynikiSymulacji()
 void QKontrolerSymulacji::openFile(QString str)
 {
     std::string stdStr(str.toUtf8());
-    m_ob->wczytajDane(stdStr);
+    m_petla->wczytajDane(stdStr);
     zbierzDaneDoprzeslania();
 }
 /*!
@@ -166,7 +166,7 @@ void QKontrolerSymulacji::openFile(QString str)
 void QKontrolerSymulacji::saveFile(QString str)
 {
     std::string stdStr(str.toUtf8());
-    m_ob->zapiszDane(stdStr,"test");
+    m_petla->zapiszDane(stdStr,"test");
 }
 
 
@@ -264,6 +264,14 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
     if(it!=m.end()){
         if(!(it.value().empty())){
             setPredkoscSymulacji(static_cast<int>(it.value()[0]));
+        }
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_wzmocnienie;
+    it = m.find(pom);
+    if(it!=m.end()){
+        if(!(it.value().empty())){
+            m_petla->setNastawyRegulatora(it.value().toStdVector());
         }
     }
 

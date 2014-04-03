@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     dekorator/dekorujprostokatem.cpp \
     dekorator/komponentkonkretny.cpp \
     regulator/kompozytobiektow.cpp \
-    regulator/regulator.cpp
+    regulator/regulator.cpp \
+    regulator/petlaregulacji.cpp \
+    regulator/regulatorp.cpp
 
 HEADERS  += \
     qcustomplot.h \
@@ -45,7 +47,9 @@ HEADERS  += \
     dekorator/komponent.h \
     dekorator/komponentkonkretny.h \
     regulator/kompozytobiektow.h \
-    regulator/regulator.h
+    regulator/regulator.h \
+    regulator/petlaregulacji.h \
+    regulator/regulatorp.h
 
 FORMS    += \
     gui.ui

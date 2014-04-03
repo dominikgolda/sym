@@ -17,7 +17,7 @@ public:
     //! \param nr_probki - Numer aktualnej probki przebiegu dla obiektow dyskretnych. Nie używany.
     //! \return zwraca wartość = 0
     //! Funkcja służy do zapoczątkowania składania przebiegów wartości zadanej.
-    double generuj(int nr_probki){
+    double generuj(int){
         return 0;
     }
 };

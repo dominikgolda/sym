@@ -269,8 +269,8 @@ void Gui::setTextDlaKontrolekDouble(QLineEdit *edit,QString tekst)
     edit->setText(tekst);
     QDoubleValidator *pom = new QDoubleValidator;
     pom->setLocale(QLocale::English);
-    m_ui->setWZadana->setValidator(pom);
-
+//    m_ui->setWZadana->setValidator(pom);
+edit->setValidator(pom);
 }
 
 ///
@@ -374,6 +374,12 @@ void Gui::on_setPrSym_valueChanged(int arg1)
     emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_predkoscSymulacji,static_cast<double>(arg1)));
 }
 
+
+void Gui::on_setWzmocnienie_returnPressed(){
+    QVector<double> p ;
+    p.push_back(m_ui->setWzmocnienie->text().toDouble());
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_wzmocnienie,p));
+}
 
 //s////////////////////////////////////////////////////////////
 //s//////////         Kontrola symulacji              /////////
@@ -487,7 +493,4 @@ void Gui::on_actionZatrzymaj_symulacje_triggered()
     emit symulacjaStop();
 }
 
-void Gui::on_setWzmocnienie_returnPressed()
-{
 
-}
