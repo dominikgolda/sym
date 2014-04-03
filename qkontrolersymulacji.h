@@ -122,6 +122,7 @@ public slots:
     /// -"m_czas" - czas symulacji
     /// -"m_predkoscSymulacji" - o ile szybciej ma wykonywać się symulacja
     void odbierzDaneObiektu(QMapaDanych m);
+    void odbierzDaneObiektu(std::vector<TypyWymuszen> w, std::vector<std::vector<double> > param);
 private slots:
     void onTimeout();
     //wysyła sygnał wynikiSymulacji z m_histU, m_histY, m_histT oraz czyści te bufory

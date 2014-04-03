@@ -277,6 +277,11 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
 
 }
 
+void QKontrolerSymulacji::odbierzDaneObiektu(std::vector<TypyWymuszen> w, std::vector<std::vector<double> > param)
+{
+    m_petla->setWartoscZadana(w,param);
+}
+
 //s////////// ////////////////////////
 //s////////// SETERY specjalizowane ////////////////////////
 //s////////// wywoływane przez ////////////////////////

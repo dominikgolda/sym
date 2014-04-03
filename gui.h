@@ -36,6 +36,7 @@ signals:
 //    void setWariancja(double wariancja);
     void getParameters();
     void setParameters(QMapaDanych m);
+    void setParameters(std::vector<TypyWymuszen> w, std::vector<std::vector<double> > param);
 public slots:
     void odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u);
     void symulacjaZakonczona();
@@ -86,6 +87,11 @@ private slots:
     void on_wyborLicznika_valueChanged(int);
     void on_wyborMianownika_valueChanged(int);
     void on_setWzmocnienie_returnPressed();
+
+    void on_aktualizujSinusaButton_clicked();
+    void on_aktualizujWartoscSinu_clicked();
+    void on_aktualizujWartoscTrojkat_clicked();
+    void on_aktualizujWartoscStala_clicked();
 };
 
 #endif // GUI_H

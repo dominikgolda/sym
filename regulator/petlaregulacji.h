@@ -45,6 +45,13 @@ public:
     ///
     void setNastawyRegulatora(std::vector<double> nastawy);
 
+    ///
+    /// \brief setWartoscZadana - tworzy generator wartości zadanej opisany przez zmienne funkcji
+    /// \param w - typy wymuszeń jakie mają być użyte, pierwszy element w "w" jest najbardziej zewnętrznym jaki zostanie stworzony
+    /// \param param - parametry dla tworzonych generatorów
+    ///
+    void setWartoscZadana(const std::vector<TypyWymuszen> &w, const std::vector<std::vector<double> > &param);
+
     //funkcje z KompozytuObiektow, które stosujemy
     using KompozytObiektow::wczytajDane;
     using KompozytObiektow::zapiszDane;

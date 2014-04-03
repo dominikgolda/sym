@@ -42,7 +42,7 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
     connect(this,SIGNAL(getParameters()),kontroler,SLOT(getParameters()));
     //wysyłanie ustawień do obiektu
     connect(this,SIGNAL(setParameters(QMapaDanych)),kontroler,SLOT(odbierzDaneObiektu(QMapaDanych)));
-
+    connect(this,SIGNAL(setParameters(std::vector<TypyWymuszen>,std::vector<std::vector<double> >)),kontroler,SLOT(odbierzDaneObiektu(std::vector<TypyWymuszen>,std::vector<std::vector<double> >)));
     //wysyłanie ustawień do obiektu
 //    connect(this,SIGNAL(setWymuszenie(std::vector<double>)),kontroler,SLOT(setWymuszenie(std::vector<double>)));
 //    connect(this,SIGNAL(setDt(double)),kontroler,SLOT(setDt(double)));
@@ -494,3 +494,58 @@ void Gui::on_actionZatrzymaj_symulacje_triggered()
 }
 
 
+
+void Gui::on_aktualizujSinusaButton_clicked()
+{
+
+    std::vector<TypyWymuszen> typ;
+    typ.push_back(TypyWymuszen::sinus);
+    std::vector<std::vector<double>> par;
+    std::vector<double> p;
+    p.push_back( m_ui->setSinT->text().toDouble());
+    p.push_back(m_ui->setSinA->text().toDouble());
+    par.push_back(p);
+    setParameters(typ,par);
+
+}
+
+
+
+void Gui::on_aktualizujWartoscSinu_clicked()
+{
+    std::vector<TypyWymuszen> typ;
+    typ.push_back(TypyWymuszen::prostokat);
+    std::vector<std::vector<double>> par;
+    std::vector<double> p;
+    p.push_back( m_ui->setProstokatT->text().toDouble());
+    p.push_back(m_ui->setProstokatKmax->text().toDouble());
+    p.push_back(m_ui->setProstokatKmin->text().toDouble());
+     par.push_back(p);
+    setParameters(typ,par);
+}
+
+void Gui::on_aktualizujWartoscTrojkat_clicked()
+{
+    std::vector<TypyWymuszen> typ;
+    typ.push_back(TypyWymuszen::trojkat);
+    std::vector<std::vector<double>> par;
+    std::vector<double> p;
+    p.push_back( m_ui->setTrojkatT->text().toDouble());
+    p.push_back(m_ui->setTrojkatKmax->text().toDouble());
+    p.push_back(m_ui->setTrojkatKmin->text().toDouble());
+     par.push_back(p);
+    setParameters(typ,par);
+
+}
+
+void Gui::on_aktualizujWartoscStala_clicked()
+{
+    std::vector<TypyWymuszen> typ;
+    typ.push_back(TypyWymuszen::stala);
+    std::vector<std::vector<double>> par;
+    std::vector<double> p;
+    p.push_back( m_ui->setWartoscStala->text().toDouble());
+    par.push_back(p);
+    setParameters(typ,par);
+
+}

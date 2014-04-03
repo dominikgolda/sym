@@ -74,3 +74,10 @@ void PetlaRegulacji::setNastawyRegulatora(std::vector<double> nastawy)
         dynamic_cast<Regulator*>(m_obiekty.at(0))->setNastawyRegulatora(nastawy);
     }
 }
+
+void PetlaRegulacji::setWartoscZadana(const std::vector<TypyWymuszen> &w, const std::vector<std::vector<double> > &param)
+{
+    if(m_jestRegulator){
+        dynamic_cast<Regulator*>(m_obiekty.at(0))->setWartoscZadana(w,param);
+    }
+}

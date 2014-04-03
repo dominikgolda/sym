@@ -10,8 +10,8 @@ public:
 
     double symuluj(double y, double *wartoscZadana);
     void setNastawyRegulatora(std::vector<double> nastawy);
-    void wczytajDane(string sciezka){};
-    void zapiszDane(string sciezka, string nazwa_obiektu){};
+    void wczytajDane(string sciezka){}
+    void zapiszDane(string sciezka, string nazwa_obiektu){}
 private:
     //wzmocnienie
     double m_k = 10;
