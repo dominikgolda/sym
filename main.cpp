@@ -28,12 +28,6 @@ int main(int argc, char *argv[])
     std::shared_ptr<QKontrolerSymulacji>kontroler(new QKontrolerSymulacji(inercja.get(),&petla));
     Gui okno(kontroler.get());
 
-//       std::vector<double> L{0.001, 0};
-//       std::vector<double> M{1,-0.999};
-//       ObiektDyskretny *inercja = new ObiektDyskretny(std::move(L),std::move(M));//(0,0.1,1,10,2);
-//       delete inercja;
-       //QKontrolerSymulacji* kontroler= new QKontrolerSymulacji(inercja);
-       //Gui okno(kontroler);
     okno.show();
 
     app.exec();
