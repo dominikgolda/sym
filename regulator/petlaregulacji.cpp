@@ -11,7 +11,7 @@ double PetlaRegulacji::symuluj(double, double *czas)
     if(m_obiekty.begin()!=m_obiekty.end()){
         //czy do w pętli regulacji znajduje się regulator
         if(m_jestRegulator){
-            m_poprzednieWyjscie = (*it)->symuluj(m_poprzednieWyjscie,&m_wZadana);
+            m_sterowanie = (*it)->symuluj(m_poprzednieWyjscie,&m_wZadana);
             ++it;
         }else{
             m_poprzednieWyjscie = (*it)->symuluj(m_poprzednieWyjscie,czas);
@@ -20,7 +20,7 @@ double PetlaRegulacji::symuluj(double, double *czas)
     }
     //symulacja innych obiektów
     for(;it!=m_obiekty.end();++it){
-        m_poprzednieWyjscie = (*it)->symuluj(m_poprzednieWyjscie,czas);
+        m_poprzednieWyjscie = (*it)->symuluj(m_sterowanie,czas);
     }
     return m_poprzednieWyjscie;
 //    m_poprzednieWyjscie= KompozytObiektow::symuluj(m_poprzednieWyjscie,czas);
@@ -80,4 +80,9 @@ void PetlaRegulacji::setWartoscZadana(const std::vector<TypyWymuszen> &w, const 
     if(m_jestRegulator){
         dynamic_cast<Regulator*>(m_obiekty.at(0))->setWartoscZadana(w,param);
     }
+}
+
+double PetlaRegulacji::getSterowanie()
+{
+    return m_sterowanie;
 }

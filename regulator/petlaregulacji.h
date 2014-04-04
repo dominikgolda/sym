@@ -52,6 +52,11 @@ public:
     ///
     void setWartoscZadana(const std::vector<TypyWymuszen> &w, const std::vector<std::vector<double> > &param);
 
+    ///
+    /// \brief getSterowanie
+    /// \return - wartość sterowania w danej iteracji. Jeżeli w pętli nie ma regulatora zwraca 0
+    ///
+    double getSterowanie();
     //funkcje z KompozytuObiektow, które stosujemy
     using KompozytObiektow::wczytajDane;
     using KompozytObiektow::zapiszDane;
@@ -60,6 +65,8 @@ protected:
     double m_poprzednieWyjscie = 0;
     //przechowuje wartość wartości zadaną jaka była stosowana przez regulator
     double m_wZadana=0;
+    //wartosc na wyjsciu z regulatora
+    double m_sterowanie = 0;
     //ile regulatorów jest w pętli
     unsigned short m_jestRegulator = 0;
 

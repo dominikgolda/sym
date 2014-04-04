@@ -33,7 +33,7 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
     connect(this,SIGNAL(saveFile(QString)),kontroler,SLOT(saveFile(QString)));
 
     //odbiór danych
-    connect(kontroler,SIGNAL(wynikSymulacji(QVector<double>,QVector<double>,QVector<double>)),this,SLOT(odbierzWyniki(QVector<double>,QVector<double>,QVector<double>)));
+    connect(kontroler,SIGNAL(wynikSymulacji(QVector<double>,QVector<double>,QVector<double>,QVector<double>)),this,SLOT(odbierzWyniki(QVector<double>,QVector<double>,QVector<double>,QVector<double>)));
     connect(kontroler,SIGNAL(wyslijDaneObiektu(QMapaDanych)),this,SLOT(ustawDaneDlaUzytkownika(QMapaDanych)));
     //informacje z obiektu
     connect(kontroler,SIGNAL(symulacjaZakonczona()),this,SLOT(symulacjaZakonczona()));
@@ -43,13 +43,6 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
     //wysyłanie ustawień do obiektu
     connect(this,SIGNAL(setParameters(QMapaDanych)),kontroler,SLOT(odbierzDaneObiektu(QMapaDanych)));
     connect(this,SIGNAL(setParameters(std::vector<TypyWymuszen>,std::vector<std::vector<double> >)),kontroler,SLOT(odbierzDaneObiektu(std::vector<TypyWymuszen>,std::vector<std::vector<double> >)));
-    //wysyłanie ustawień do obiektu
-//    connect(this,SIGNAL(setWymuszenie(std::vector<double>)),kontroler,SLOT(setWymuszenie(std::vector<double>)));
-//    connect(this,SIGNAL(setDt(double)),kontroler,SLOT(setDt(double)));
-//    connect(this,SIGNAL(setWielomianLicznika(std::vector<double>,int,std::string)),kontroler,SLOT(setWielomianLicznika(std::vector<double>,int,std::string)));
-//    connect(this,SIGNAL(setWielomianMianownika(std::vector<double>,int,std::string)),kontroler,SLOT(setWielomianMianownik(std::vector<double>,int,std::string)));
-//    connect(this,SIGNAL(setWariancja(double)),kontroler,SLOT(setWariancja(double)));
-
 
     //wymuszenie skok jednostkowy
     emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_wZadana,1));
@@ -71,14 +64,16 @@ Gui::~Gui()
 //s////////////////////////////////////////////////////////////
 //s//////////      odbieranie wyników symulacji        ////////
 //s////////////////////////////////////////////////////////////
-void Gui::odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u)
+void Gui::odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u, QVector<double> wz)
 {
 
     m_ui->m_wykrWyjWartZad->graph(0)->addData(t,y);
+    m_ui->m_wykrWyjWartZad->graph(1)->addData(t,wz);
     m_ui->m_wykrSter->graph(0)->addData(t,u);
     m_ui->m_wykrSter->graph(0)->rescaleAxes();
-   m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
-    m_ui->m_wykrSter->replot();
+    m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
+    m_ui->m_wykrWyjWartZad->graph(1)->rescaleAxes();
+     m_ui->m_wykrSter->replot();
     m_ui->m_wykrWyjWartZad->replot();
     //ustawianie wartości w labelach
     m_ui->labelSterowanie->setText(QString::number(u.last()));
@@ -221,6 +216,7 @@ void Gui::ustawWykres()
 
     m_ui->m_wykrWyjWartZad->addGraph();
     m_ui->m_wykrWyjWartZad->addGraph();
+    m_ui->m_wykrWyjWartZad->graph(1)->setPen(QPen(Qt::red));
     m_ui->m_wykrWyjWartZad->xAxis->setLabel("t[s]");
     m_ui->m_wykrWyjWartZad->yAxis->setLabel("y");
     m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
@@ -255,6 +251,17 @@ void Gui::ustawKontrolki()
 
     m_ui->setWielomianLicznka->setValidator(new QVectorValidator);
     m_ui->setWielomianMianownika->setValidator(new QVectorValidator);
+
+    setTextDlaKontrolekDouble(m_ui->setSinA,QString("1"));
+    setTextDlaKontrolekDouble(m_ui->setSinT,QString("50"));
+    setTextDlaKontrolekDouble(m_ui->setProstokatKmax,QString("10"));
+    setTextDlaKontrolekDouble(m_ui->setProstokatKmin,QString("0"));
+    setTextDlaKontrolekDouble(m_ui->setProstokatT,QString("50"));
+    setTextDlaKontrolekDouble(m_ui->setTrojkatKmax,QString("10"));
+    setTextDlaKontrolekDouble(m_ui->setTrojkatKmin,QString("0"));
+    setTextDlaKontrolekDouble(m_ui->setTrojkatT,QString("50"));
+    setTextDlaKontrolekDouble(m_ui->setWartoscStala,QString("2"));
+    setTextDlaKontrolekDouble(m_ui->setWzmocnienie,QString("1"));
 
 }
 
@@ -411,6 +418,7 @@ void Gui::on_resetujWykresy_clicked()
 {
     m_ui->m_wykrSter->graph(0)->clearData();
     m_ui->m_wykrWyjWartZad->graph(0)->clearData();
+    m_ui->m_wykrWyjWartZad->graph(1)->clearData();
 }
 
 //s//////////        symulacja krokowa                 /////////

@@ -38,7 +38,7 @@ signals:
     void setParameters(QMapaDanych m);
     void setParameters(std::vector<TypyWymuszen> w, std::vector<std::vector<double> > param);
 public slots:
-    void odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u);
+    void odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u,QVector<double> wz);
     void symulacjaZakonczona();
     /*!
      * \brief ustawDaneDlaUzytkownika

@@ -20,6 +20,7 @@ Regulator::Regulator(string nazwa,std::vector<TypyWymuszen> w, std::vector<std::
 
 }
 
+
 void Regulator::setWartoscZadana(const std::vector<TypyWymuszen> &w,const std::vector<std::vector<double>> &param)
 {
     //sprawdzam, czy wektor nie jest pusty i zy wektor typów jest tej samej długości co wektor parametrów

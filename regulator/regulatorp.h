@@ -14,7 +14,7 @@ public:
     void zapiszDane(string sciezka, string nazwa_obiektu){}
 private:
     //wzmocnienie
-    double m_k = 10;
+    double m_k = 1;
 };
 
 #endif // REGULATORP_H

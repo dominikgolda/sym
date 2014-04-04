@@ -104,9 +104,11 @@ void QKontrolerSymulacji::m_symuluj(){
             double czas;
             //symulacja
             double y = m_petla->symuluj(m_u.at(0),&czas);
-            double u = m_petla->getWartoscZadanaValue();
+            double wz = m_petla->getWartoscZadanaValue();
+            double u = m_petla->getSterowanie();
             //przechowywanie danych do przesłania
             m_histT.push_back(czas);
+            m_histWZ.push_back(wz);
             m_histU.push_back(u);
             m_histY.push_back(y);
         }
@@ -136,10 +138,11 @@ void QKontrolerSymulacji::m_symuluj(){
 void QKontrolerSymulacji::m_wyslijWynikiSymulacji()
 {
     if(!m_histT.empty()){
-        emit wynikSymulacji(m_histY,m_histT,m_histU);
+        emit wynikSymulacji(m_histY,m_histT,m_histU,m_histWZ);
         m_histY.clear();
         m_histU.clear();
         m_histT.clear();
+        m_histWZ.clear();
     }
 }
 

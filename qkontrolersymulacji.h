@@ -49,8 +49,9 @@ public:
     /// \param y - wyjścia z obiektu
     /// \param t - czas odpowiadający tym wyjściom
     /// \param u - wejścia które podano do układu
+    /// \param wz - wartość zadana
     ///
-    void wynikSymulacji(QVector<double> y, QVector<double> t,QVector<double> u);
+    void wynikSymulacji(QVector<double> y, QVector<double> t,QVector<double> u,QVector<double> wz);
 
     ///
     /// \brief wyslijDaneObiektu
@@ -152,6 +153,7 @@ private:
     QVector<double> m_histU;
     QVector<double> m_histY;
     QVector<double> m_histT;
+    QVector<double> m_histWZ;
     //wymuszenie, jeżeli u.size = 1 przyjmujemy, że ma być podtrzymywane - nieskończenie wiele próbek
     QVector<double> m_u;
     //jeżeli m_u ma więcej niż jeden element wówczas zmienna m_licznikProbek służy do określania która probka wejścia ma być podana na obiekt
