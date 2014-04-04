@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     std::vector<double> L{0.1, 0};
     std::vector<double> M{1,-0.9};
 
-    std::vector<double> wzmocnienie{1};
+
     std::vector<std::vector<double>> wymuszenie({{50}});
     std::vector<TypyWymuszen> wym{TypyWymuszen::prostokat};
     PetlaRegulacji petla;
@@ -31,5 +31,5 @@ int main(int argc, char *argv[])
     okno.show();
 
     app.exec();
-
+    return 0;
 }

@@ -23,7 +23,6 @@ public:
     /// \return
     ///
     double getWartoscZadanaValue();
-    void zagwizdz(){std::cout<<"test"<<std::endl;}
     /// \brief getWartoscZadana Jeżeli obecny jest regulator zwraca do argumentów wywołania typ oraz parametry wartości zadanej. Jeżeli regulator nie został przypisany do pętli regulacji wektory są czyszczne.
     /// \param w - typy wymuszeń
     /// \param param - parametry wymuszeń

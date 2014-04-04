@@ -24,3 +24,13 @@ void RegulatorP::setNastawyRegulatora(std::vector<double> nastawy)
         m_k = nastawy[0];
     }
 }
+
+void RegulatorP::wczytajDane(string)
+{
+
+}
+
+void RegulatorP::zapiszDane(string, string)
+{
+
+}
