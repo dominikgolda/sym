@@ -23,7 +23,7 @@ public:
             std::string id="");
 
     ~ObiektDyskretny();
-    double symuluj(double u, double *czas=NULL);
+    double symuluj(double u);
 
     //################moje
         /*!
@@ -84,6 +84,7 @@ public:
     double getDt(){return m_dh;}
     std::string getId(){return m_id;}
     int getDelay() const {return m_delay;}
+    double getTime() const {return m_czas;}
     //signals:
     //    void symulacjaZakonczona(std::pair<double,double> wynik);
 

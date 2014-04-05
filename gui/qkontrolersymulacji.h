@@ -10,8 +10,8 @@
 #include <QSet>
 #include <set>
 #include "stale.h"
+#include "gui/generatorwartoscizadanej.h"
 
-//enum class globalNazwyZmiennych  {m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_przedkoscSymulacji};
 enum class DopuszczalneNazwyZmiennych{m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_predkoscSymulacji,m_wzmocnienie};
 
 typedef QMap<DopuszczalneNazwyZmiennych,QVector<double>> QMapaDanych;
@@ -149,6 +149,7 @@ private:
 
     PetlaRegulacji *m_petla = NULL;
 
+    std::shared_ptr<GeneratorWartosciZadanej> m_genWZadanej;
     //wektory do przechowywania punktów pomiędzy odświeżeniami wykresu/wysłaniami sygnału  wynikiSymulacji
     QVector<double> m_histU;
     QVector<double> m_histY;
@@ -165,6 +166,6 @@ private:
     //tworzenie mapy danych do przesłania do gui
     void zbierzDaneDoprzeslania();
 
-    //const static std::set<QString> m_dopuszczalneNazwyZmiennych = {"m_wZadana","m_licznik1","m_licznik2","m_mianownik1","m_mianownik2","m_wariancja","m_dh","m_delay","m_momentPrzelaczenia","m_czas","m_przedkoscSymulacji"};
+
 };
 #endif // QKONTROLERSYMULACJI_H

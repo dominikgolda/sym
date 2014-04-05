@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -84,12 +84,12 @@
        <rect>
         <x>20</x>
         <y>290</y>
-        <width>151</width>
+        <width>171</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Wartość zadana/ster</string>
+       <string>Liczba widocznych probek</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="setDh">
@@ -199,7 +199,7 @@
        <string>Bieżąca sterowanie</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="setWZadana">
+     <widget class="QLineEdit" name="setLiczbaWidocznychProbek">
       <property name="geometry">
        <rect>
         <x>20</x>

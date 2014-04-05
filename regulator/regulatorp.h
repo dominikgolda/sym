@@ -4,9 +4,9 @@
 class RegulatorP : public Regulator
 {
 public:
-    RegulatorP(std::string nazwa="regulatorP");
+    RegulatorP(const std::string &nazwa="regulatorP");
 
-    RegulatorP(std::string nazwa, std::vector<TypyWymuszen> w, std::vector<std::vector<double>> param);
+    RegulatorP(const std::string &nazwa, std::shared_ptr<Komponent> wartoscZadana);
 
     ///
     /// \brief symuluj - funkcja wyznaczająca sterowanie w odpowiedzi na próbkę wejścia
@@ -14,7 +14,7 @@ public:
     /// \param wartoscZadana - bieżąca wartość zadana - do wyświetlenia na wykresie.
     /// \return -wyjście z regulatora
     ///
-    double symuluj(double y, double *wartoscZadana);
+    double symuluj(double y);
     ///
     /// \brief setNastawyRegulatora - pozwala zmienić wzmocnienie regulatora
     /// \param nastawy - brana jest pod uwagę tylko pierwsza wartość w pierwszym wektorze

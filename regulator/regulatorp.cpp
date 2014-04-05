@@ -1,21 +1,21 @@
 #include "regulatorp.h"
 #include <string>
-RegulatorP::RegulatorP(std::string nazwa):
+RegulatorP::RegulatorP(const std::string &nazwa):
     Regulator(nazwa)
 {
 }
 
-RegulatorP::RegulatorP(std::string nazwa, std::vector<TypyWymuszen> w, std::vector<std::vector<double>> param):
-    Regulator(nazwa,w,param)
+RegulatorP::RegulatorP(const std::string &nazwa, std::shared_ptr<Komponent> wartoscZadana):
+    Regulator(nazwa,wartoscZadana)
 {
 
 }
 
-double RegulatorP::symuluj(double y, double *wartoscZadana)
+double RegulatorP::symuluj(double y)
 {
-    *wartoscZadana = m_WartoscZadana->generuj(m_nrProbki);
+    double wartoscZadana = m_WartoscZadana->generuj(m_nrProbki);
     ++m_nrProbki;
-    return m_k*(*wartoscZadana - y);
+    return m_k*(wartoscZadana - y);
 }
 
 void RegulatorP::setNastawyRegulatora(std::vector<double> nastawy)

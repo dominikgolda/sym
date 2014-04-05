@@ -1,12 +1,12 @@
-#ifndef KOMPOZYTOBIEKTOW_H
-#define KOMPOZYTOBIEKTOW_H
+#ifndef POLACZENIESZEREGOWE_H
+#define POLACZENIESZEREGOWE_H
 #include "obiektsiso.h"
 #include <list>
-class KompozytObiektow : public ObiektSiso
+class PolaczenieSzeregowe : public ObiektSiso
 {
 public:
-    KompozytObiektow();
-    double symuluj(double u, double *czas);
+    PolaczenieSzeregowe();
+    double symuluj(double u);
     void wczytajDane(std::string sciezka);
     void zapiszDane(std::string sciezka, std::string nazwa_obiektu);
     void resetujSymulacje();
@@ -30,4 +30,4 @@ protected:
 
 };
 
-#endif // KOMPOZYTOBIEKTOW_H
+#endif // POLACZENIESZEREGOWE_H

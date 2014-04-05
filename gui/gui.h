@@ -55,10 +55,13 @@ private:
     void ustawWykres();
     void ustawKontrolki();
     void setTextDlaKontrolekDouble(QLineEdit* edit, QString tekst);
+    unsigned int m_liczbaWidocznychProbek = 200;
     QVector<double> convretQStringToDoubleVector(QString str);
     QString stworzQStringWielomianu(QVector<double> &wielomian, int delay=0);
+
 //c//////////////////////////////////
 private slots:
+    void przeskalujOsie();
     void on_actionSymulacja_ciagla_triggered();
 
     void on_symCiagla_clicked();
@@ -71,7 +74,7 @@ private slots:
 
 
 
-    void on_setWZadana_returnPressed();
+    //void on_setWZadana_returnPressed();
 
     void on_setDh_returnPressed();
 
@@ -92,6 +95,7 @@ private slots:
     void on_aktualizujWartoscSinu_clicked();
     void on_aktualizujWartoscTrojkat_clicked();
     void on_aktualizujWartoscStala_clicked();
+    void on_setLiczbaWidocznychProbek_returnPressed();
 };
 
 #endif // GUI_H

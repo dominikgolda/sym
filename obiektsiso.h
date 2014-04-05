@@ -11,7 +11,8 @@ public:
 
     ObiektSiso();
     //czysto wirtualne
-    virtual double symuluj(double u, double *czas) =0;
+    virtual double symuluj(double u) =0;
+    virtual double getTime() const = 0;
     virtual void wczytajDane(std::string sciezka)=0;
     virtual void resetujSymulacje()=0;
     virtual void zapiszDane(std::string sciezka, std::string nazwa_obiektu)=0;

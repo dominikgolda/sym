@@ -1,6 +1,6 @@
 #ifndef PETLAREGULACJI_H
 #define PETLAREGULACJI_H
-#include "regulator/kompozytobiektow.h"
+#include "regulator/polaczenieszeregowe.h"
 #include "regulator/regulator.h"
 #include <memory>
 #include "stale.h"
@@ -8,16 +8,15 @@
 
 
 #include <iostream>
-class PetlaRegulacji : private KompozytObiektow
+class PetlaRegulacji : private PolaczenieSzeregowe
 {
 public:
     PetlaRegulacji();
     ///
     /// \brief symuluj - jeden krok symulacji układu w pętli zamkniętej
-    /// \param czas
     /// \return
     ///
-    double symuluj(double, double *czas);
+    double symuluj(double);
     ///
     /// \brief inline getWartoscZadanaValue - zwraca wartość zadaną jaka była stosowana przez regulator przy ostatniej symulacji. Jeżeli nie
     /// \return
@@ -26,12 +25,6 @@ public:
     /// \brief getWartoscZadana Jeżeli obecny jest regulator zwraca do argumentów wywołania typ oraz parametry wartości zadanej. Jeżeli regulator nie został przypisany do pętli regulacji wektory są czyszczne.
     /// \param w - typy wymuszeń
     /// \param param - parametry wymuszeń
-    void getWartoscZadana(std::vector<TypyWymuszen> &w, std::vector<std::vector<double> > &param);
-    ///
-    /// \brief dodajObiekt - wstawia nowy obiekt na listę. Nie należy używać tej funkcji do dodawania regulatorów, do tego służy funkcja dodajRegulator.
-    /// \param obiekt - wskaźnik do obiektu do wstawienia
-    /// \param gdzie - pozycja na którą należy wstawić nowy obiekt. Jeżeli podana zostanie liczba ujemna lub dodatnia, większa od długości wektora obiektów wskaźnik do obiektu zostanie wstawiony na końcu. Funcja nie wstawi obiektu na pozycję 0, jeżeli w pętli jest regulator.
-    ///
     void dodajObiekt(ObiektSiso *obiekt,int gdzie=-1);
     ///
     /// \brief dodajRegulator - dodaje regulator na pierwsze miejsce listy obiektów. Jeżeli PętlaRegulacji nie zawierała wcześniej regulatora jest on wstawiany na pierwsze miejsce. Jeżeli regulator był obecny jest on zastępowany nowym regulatorem.
@@ -49,17 +42,25 @@ public:
     /// \param w - typy wymuszeń jakie mają być użyte, pierwszy element w "w" jest najbardziej zewnętrznym jaki zostanie stworzony
     /// \param param - parametry dla tworzonych generatorów
     ///
-    void setWartoscZadana(const std::vector<TypyWymuszen> &w, const std::vector<std::vector<double> > &param);
+    void setWartoscZadana(shared_ptr<Komponent> wartoscZadana);
 
     ///
     /// \brief getSterowanie
     /// \return - wartość sterowania w danej iteracji. Jeżeli w pętli nie ma regulatora zwraca 0
     ///
-    double getSterowanie();
+    double getSterowanie() const;
+    ///
+    /// \brief getTime
+    /// \return - czas symulacji. Jeżeli w pętli jest obiekt czas pobierany jest z obiektu. Jeżeli w pętli jest tylko regulator czas pobierany jest z regulatora. Jeżeli w pętli nie ma ani obiektów, ani regulatorów wówczas zwracane jeset 0.
+    ///
+    double getTime() const;
+
+    void resetujSymulacje();
+
     //funkcje z KompozytuObiektow, które stosujemy
-    using KompozytObiektow::wczytajDane;
-    using KompozytObiektow::zapiszDane;
-    using KompozytObiektow::resetujSymulacje;
+    using PolaczenieSzeregowe::wczytajDane;
+    using PolaczenieSzeregowe::zapiszDane;
+    using PolaczenieSzeregowe::resetujSymulacje;
 protected:
     double m_poprzednieWyjscie = 0;
     //przechowuje wartość wartości zadaną jaka była stosowana przez regulator

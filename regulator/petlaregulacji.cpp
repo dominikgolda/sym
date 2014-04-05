@@ -4,23 +4,23 @@ PetlaRegulacji::PetlaRegulacji()
 {
 }
 
-double PetlaRegulacji::symuluj(double, double *czas)
+double PetlaRegulacji::symuluj(double)
 {
     auto it = m_obiekty.begin();
     //symulacja regulatora
     if(m_obiekty.begin()!=m_obiekty.end()){
         //czy do w pętli regulacji znajduje się regulator
         if(m_jestRegulator){
-            m_sterowanie = (*it)->symuluj(m_poprzednieWyjscie,&m_wZadana);
+            m_sterowanie = (*it)->symuluj(m_poprzednieWyjscie);
             ++it;
         }else{
-            m_poprzednieWyjscie = (*it)->symuluj(m_poprzednieWyjscie,czas);
+            m_sterowanie = (*it)->symuluj(m_poprzednieWyjscie);
         }
 
     }
     //symulacja innych obiektów
     for(;it!=m_obiekty.end();++it){
-        m_poprzednieWyjscie = (*it)->symuluj(m_sterowanie,czas);
+        m_poprzednieWyjscie = (*it)->symuluj(m_sterowanie);
     }
     return m_poprzednieWyjscie;
 //    m_poprzednieWyjscie= KompozytObiektow::symuluj(m_poprzednieWyjscie,czas);
@@ -28,21 +28,17 @@ double PetlaRegulacji::symuluj(double, double *czas)
 
 double PetlaRegulacji::getWartoscZadanaValue()
 {
-    return m_wZadana;
-}
-
-void PetlaRegulacji::getWartoscZadana(std::vector<TypyWymuszen> &w, std::vector<std::vector<double> > &param)
-{
+    //jeżeli w pętli jest regulator zwracana jest wartość zadana dla obecnego numeru próbki
     if(m_jestRegulator){
-        //jeżeli jest regulator zwracane są wartości z regulatora
-        dynamic_cast<Regulator*>(m_obiekty[0])->getWartoscZadana(w,param);
+        return dynamic_cast<Regulator*>(m_obiekty.at(0))->getWartoscZadanaValue();
     }else{
-        //jeżeli nie ma regulatora wektory są opróżniane
-        w.erase(w.begin(),w.end());
-        param.erase(param.begin(),param.end());
+        //jeżeli w pętli nie ma regulatora pętla działa tak jakby był w niej regulator p o wzmocnieniu 1 - zwracana jest poprzednia wartość wyjścia
+        return m_poprzednieWyjscie;
     }
 
 }
+
+
 
 void PetlaRegulacji::dodajObiekt(ObiektSiso *obiekt, int gdzie)
 {
@@ -75,14 +71,44 @@ void PetlaRegulacji::setNastawyRegulatora(std::vector<double> nastawy)
     }
 }
 
-void PetlaRegulacji::setWartoscZadana(const std::vector<TypyWymuszen> &w, const std::vector<std::vector<double> > &param)
+void PetlaRegulacji::setWartoscZadana(shared_ptr<Komponent> wartoscZadana)
 {
     if(m_jestRegulator){
-        dynamic_cast<Regulator*>(m_obiekty.at(0))->setWartoscZadana(w,param);
+        dynamic_cast<Regulator*>(m_obiekty.at(0))->setWartoscZadana(wartoscZadana);
     }
 }
 
-double PetlaRegulacji::getSterowanie()
+double PetlaRegulacji::getSterowanie() const
 {
-    return m_sterowanie;
+    if(m_jestRegulator){
+        return m_sterowanie;
+    }else{
+        return m_poprzednieWyjscie;
+    }
+}
+
+double PetlaRegulacji::getTime() const
+{
+    if(m_jestRegulator){
+        if(m_obiekty.size()>1){
+            return m_obiekty.at(1)->getTime();
+        }else if(m_obiekty.size()==1){
+            return m_obiekty.at(0)->getTime();
+        }else{
+            return 0;
+        }
+    }else{
+        if(m_obiekty.size()>0){
+            return m_obiekty.at(0)->getTime();
+        }else{
+            return 0;
+        }
+    }
+}
+
+void PetlaRegulacji::resetujSymulacje()
+{
+    m_sterowanie = 0;
+    m_poprzednieWyjscie=0;
+    PolaczenieSzeregowe::resetujSymulacje();
 }

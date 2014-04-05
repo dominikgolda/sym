@@ -12,12 +12,13 @@
 
 
 QKontrolerSymulacji::QKontrolerSymulacji(ObiektDyskretny *kontrolowany,PetlaRegulacji *petla, QObject *parent) :
-    QObject(parent)
+    QObject(parent),m_genWZadanej(new GeneratorWartosciZadanej)
 {
     //timer kontrolujący symulację
     QObject::connect(&m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
     m_petla = petla;
     m_ob = kontrolowany;
+
 }
 
 
@@ -80,6 +81,11 @@ void QKontrolerSymulacji::symulacjaKrokowa(){
 //s////////// reset ////////////////////////
 void QKontrolerSymulacji::resetSymulacji()
 {
+    std::vector<TypyWymuszen> a;
+    a.push_back(TypyWymuszen::brak);
+    std::vector<std::vector<double>> p{1};
+    m_genWZadanej->setWartoscZadana(a,p);
+    m_petla->setWartoscZadana(m_genWZadanej->getWartoscZadana());
     m_petla->resetujSymulacje();
 }
 
@@ -103,9 +109,11 @@ void QKontrolerSymulacji::m_symuluj(){
         if(m_u.size()==1){
             double czas;
             //symulacja
-            double y = m_petla->symuluj(m_u.at(0),&czas);
+            double y = m_petla->symuluj(m_u.at(0));
             double wz = m_petla->getWartoscZadanaValue();
             double u = m_petla->getSterowanie();
+            //odczytanie czasu
+            czas = m_petla->getTime();
             //przechowywanie danych do przesłania
             m_histT.push_back(czas);
             m_histWZ.push_back(wz);
@@ -116,7 +124,9 @@ void QKontrolerSymulacji::m_symuluj(){
         else if(m_u.size()>m_licznikProbek){
             double czas;
             //symulacja
-            double y = m_petla->symuluj(m_u.at(m_licznikProbek),&czas);
+            double y = m_petla->symuluj(m_u.at(m_licznikProbek));
+            //odczytanie czasu
+            czas = m_petla->getTime();
             //przechowywanie danych do przesłania
             m_histT.push_back(czas);
             m_histU.push_back(m_u.at(m_licznikProbek));
@@ -282,7 +292,8 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
 
 void QKontrolerSymulacji::odbierzDaneObiektu(std::vector<TypyWymuszen> w, std::vector<std::vector<double> > param)
 {
-    m_petla->setWartoscZadana(w,param);
+    m_genWZadanej->appendWartoscZadana(w,param);
+    m_petla->setWartoscZadana(m_genWZadanej->getWartoscZadana());
 }
 
 //s////////// ////////////////////////

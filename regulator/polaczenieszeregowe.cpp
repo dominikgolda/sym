@@ -1,24 +1,24 @@
 #include <list>
-#include "regulator/kompozytobiektow.h"
+#include "regulator/polaczenieszeregowe.h"
 
-KompozytObiektow::KompozytObiektow()
+PolaczenieSzeregowe::PolaczenieSzeregowe()
 {
 }
 
-double KompozytObiektow::symuluj(double u, double *czas)
+double PolaczenieSzeregowe::symuluj(double u)
 {
     auto it = m_obiekty.begin();
     if(m_obiekty.begin()!=m_obiekty.end()){
-        u = (*it)->symuluj(u,czas);
+        u = (*it)->symuluj(u);
         ++it;
     }
     for(;it!=m_obiekty.end();++it){
-        u = (*it)->symuluj(u,czas);
+        u = (*it)->symuluj(u);
     }
     return u;
 }
 
-void KompozytObiektow::wczytajDane(std::string sciezka)
+void PolaczenieSzeregowe::wczytajDane(std::string sciezka)
 {
     auto it = m_obiekty.begin();
     if(m_obiekty.begin()!=m_obiekty.end()){
@@ -31,7 +31,7 @@ void KompozytObiektow::wczytajDane(std::string sciezka)
 }
 
 
-void KompozytObiektow::zapiszDane(std::string sciezka, std::string nazwa_obiektu)
+void PolaczenieSzeregowe::zapiszDane(std::string sciezka, std::string nazwa_obiektu)
 {
     auto it = m_obiekty.begin();
     if(m_obiekty.begin()!=m_obiekty.end()){
@@ -42,7 +42,7 @@ void KompozytObiektow::zapiszDane(std::string sciezka, std::string nazwa_obiektu
         (*it)->zapiszDane(sciezka,nazwa_obiektu);
     }
 }
-void KompozytObiektow::resetujSymulacje()
+void PolaczenieSzeregowe::resetujSymulacje()
 {
     {
         auto it = m_obiekty.begin();
@@ -56,7 +56,7 @@ void KompozytObiektow::resetujSymulacje()
     }
 }
 
-void KompozytObiektow::dodajObiekt(ObiektSiso *obiekt, int gdzie)
+void PolaczenieSzeregowe::dodajObiekt(ObiektSiso *obiekt, int gdzie)
 {
     if(gdzie>=0){
         if(static_cast<int>(m_obiekty.size())>gdzie){
@@ -69,7 +69,7 @@ void KompozytObiektow::dodajObiekt(ObiektSiso *obiekt, int gdzie)
     }
 }
 
-void KompozytObiektow::usunObiekt(int ktory)
+void PolaczenieSzeregowe::usunObiekt(int ktory)
 {
     //czy listan nie jest pusta
     if(m_obiekty.begin()!=m_obiekty.end()){

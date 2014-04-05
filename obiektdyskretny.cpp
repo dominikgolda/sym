@@ -58,11 +58,8 @@ ObiektDyskretny::~ObiektDyskretny()
     std::cout<<"destruktor obiektu dyskretnego"<<std::endl;
 }
 //s//////////////////             symuluj         ///////////////////////////////////////////////
-double ObiektDyskretny::symuluj(double u, double *czas){
+double ObiektDyskretny::symuluj(double u){
     m_czas+=m_dh;
-    if(czas!=NULL){
-        *czas = m_czas;
-    }
     double yNowe;
 
     //przełączenie parametrów nie występuje, w ogóle lub jeszcze nie występuje

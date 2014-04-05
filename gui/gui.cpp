@@ -18,7 +18,6 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
     m_ui(new Ui::Gui)
 {
     m_ui->setupUi(this);
-    ustawWykres();
     ustawKontrolki();
     //zamykanie programu
     connect(m_ui->actionZakoncz,SIGNAL(triggered()),qApp,SLOT(quit()));
@@ -48,6 +47,8 @@ Gui::Gui(QKontrolerSymulacji *kontroler, QWidget *parent) :
     emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_wZadana,1));
     //ustawienie tekstów w kontrolkach zgodnie z zawartością obiektu
     emit getParameters();
+    //ma być na kończu, żeby była już znana wartość czasu próbkowania
+    ustawWykres();
 }
 
 //s////////////////////////////////////////////////////////////
@@ -70,12 +71,11 @@ void Gui::odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u,
     m_ui->m_wykrWyjWartZad->graph(0)->addData(t,y);
     m_ui->m_wykrWyjWartZad->graph(1)->addData(t,wz);
     m_ui->m_wykrSter->graph(0)->addData(t,u);
-    m_ui->m_wykrSter->graph(0)->rescaleAxes();
-    m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
-    m_ui->m_wykrWyjWartZad->graph(1)->rescaleAxes();
-     m_ui->m_wykrSter->replot();
-    m_ui->m_wykrWyjWartZad->replot();
-    //ustawianie wartości w labelach
+    m_ui->m_wykrSter->graph(0)->rescaleValueAxis();
+    m_ui->m_wykrWyjWartZad->graph(0)->rescaleValueAxis();
+    m_ui->m_wykrWyjWartZad->graph(1)->rescaleValueAxis();
+    przeskalujOsie();
+     //ustawianie wartości w labelach
     m_ui->labelSterowanie->setText(QString::number(u.last()));
     m_ui->labelWyjscie->setText(QString::number(y.last()));
     m_ui->labelWZadana->setText(QString::number(u.last()));
@@ -104,11 +104,6 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
     DopuszczalneNazwyZmiennych pom;
     auto it = m.begin();
 
-    pom = DopuszczalneNazwyZmiennych::m_wZadana;
-    it = m.find(pom);
-    if(it!=m.end()){
-        setTextDlaKontrolekDouble(m_ui->setWZadana,QString::number(it.value()[0]));
-    }
 
     pom = DopuszczalneNazwyZmiennych::m_dh;
     it = m.find(pom);
@@ -202,6 +197,7 @@ QString Gui::stworzQStringWielomianu(QVector<double> &wielomian,int delay)
     return pom;
 }
 
+
 ///
 /// \brief Gui::ustawWykres - wstępnie ustawia parametry wykresu
 ///
@@ -212,7 +208,6 @@ void Gui::ustawWykres()
     m_ui->m_wykrSter->xAxis->setLabel("t[s]");
     m_ui->m_wykrSter->yAxis->setLabel("y");
     m_ui->m_wykrSter->graph(0)->rescaleAxes();
-    m_ui->m_wykrSter->replot();
 
     m_ui->m_wykrWyjWartZad->addGraph();
     m_ui->m_wykrWyjWartZad->addGraph();
@@ -220,11 +215,49 @@ void Gui::ustawWykres()
     m_ui->m_wykrWyjWartZad->xAxis->setLabel("t[s]");
     m_ui->m_wykrWyjWartZad->yAxis->setLabel("y");
     m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
-    m_ui->m_wykrWyjWartZad->replot();
+    przeskalujOsie();
 
 }
 
 
+void Gui::przeskalujOsie()
+{
+    double dh;
+    dh = m_ui->setDh->text().toDouble();
+    if(dh<epsilon){
+        dh = 0.1;
+    }
+    double max;
+    {
+        QCPDataMap *pom =  m_ui->m_wykrWyjWartZad->graph(0)->data();
+        if(pom->end()!=pom->begin()){
+            auto it = pom->end();
+            max = (it-1).key();
+        }else{
+            max = m_liczbaWidocznychProbek*dh;
+        }
+    }
+    if(m_liczbaWidocznychProbek*dh<max){
+        m_ui->m_wykrWyjWartZad->xAxis->setRange(max-m_liczbaWidocznychProbek*dh,max);
+        m_ui->m_wykrSter->xAxis->setRange(max-m_liczbaWidocznychProbek*dh,max);
+     }else{
+        m_ui->m_wykrWyjWartZad->xAxis->setRange(0,m_liczbaWidocznychProbek*dh);
+        m_ui->m_wykrSter->xAxis->setRange(0,m_liczbaWidocznychProbek*dh);
+     }
+    m_ui->m_wykrSter->replot();
+    m_ui->m_wykrWyjWartZad->replot();
+
+}
+void Gui::on_setLiczbaWidocznychProbek_returnPressed()
+{
+    int pom;
+    pom = m_ui->setLiczbaWidocznychProbek->text().toUInt();
+    if(pom>0){
+        m_liczbaWidocznychProbek = pom;
+    }else{
+        m_liczbaWidocznychProbek = 1;
+    }
+}
 
 //c//////////    ustaw kontrolki   //////////////////
 ///
@@ -235,9 +268,6 @@ void Gui::ustawKontrolki()
     QDoubleValidator *pom;
     //QDoubleValidator musi być skonfigurowane na angielskie locale, żeby przyjmował '.' a nie ',' jako
     //separator dziesiętny
-    pom= new QDoubleValidator;
-    pom->setLocale(QLocale::English);
-    m_ui->setWZadana->setValidator(pom);
 
     pom= new QDoubleValidator;
     pom->setLocale(QLocale::English);
@@ -263,6 +293,10 @@ void Gui::ustawKontrolki()
     setTextDlaKontrolekDouble(m_ui->setWartoscStala,QString("2"));
     setTextDlaKontrolekDouble(m_ui->setWzmocnienie,QString("1"));
 
+    QIntValidator *pom1 = new QIntValidator;
+    m_ui->setLiczbaWidocznychProbek->setText(QString("200"));
+    pom1->setBottom(0);
+    m_ui->setLiczbaWidocznychProbek->setValidator(pom1);
 }
 
 ///
@@ -358,15 +392,6 @@ void Gui::on_actionWczytaj_plik_triggered()
 //s////////////////////////////////////////////////////////////
 
 
-//s//////////         wartość zadana                  /////////
-
-void Gui::on_setWZadana_returnPressed()
-{
-    QVector<double> vec;
-    vec.push_back(m_ui->setWZadana->text().toDouble());
-    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_wZadana,vec));
-
-}
 
 //s//////////         krok symulacji <=> Dh           /////////
 void Gui::on_setDh_returnPressed()
@@ -557,3 +582,4 @@ void Gui::on_aktualizujWartoscStala_clicked()
     setParameters(typ,par);
 
 }
+
