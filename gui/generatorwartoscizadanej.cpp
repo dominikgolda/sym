@@ -18,38 +18,18 @@ GeneratorWartosciZadanej::GeneratorWartosciZadanej(const std::vector<TypyWymusze
 
 void GeneratorWartosciZadanej::setWartoscZadana(const std::vector<TypyWymuszen> &w,const std::vector<std::vector<double>> &param)
 {
-//    //sprawdzam, czy wektor nie jest pusty
-//        int i = w.size()-1;
-//        //najbardziej zewnętrzny element
-//        m_WartoscZadana = std::shared_ptr<Komponent>(new KomponentKonkretny());
-//        m_WartoscZadana = stworzGenerator(w.at(i),param.at(i),m_WartoscZadana);
-//        --i;
-//        for(;i>=0;--i){
-//            m_WartoscZadana = stworzGenerator(w.at(i),param.at(i),m_WartoscZadana);
-//        }
+
         m_typyWymuszen = w;
         m_parametryWymuszenia = param;
-
 }
 
 void GeneratorWartosciZadanej::appendWartoscZadana(const std::vector<TypyWymuszen> &w, const std::vector<std::vector<double> > &param)
 {
-//    //sprawdzam, czy wektor nie jest pusty
-//    if(w.size()>0){
-//        int i = w.size()-1;
-//        //najbardziej zewnętrzny element
-//        m_WartoscZadana = std::shared_ptr<Komponent>(new KomponentKonkretny());
-//        m_WartoscZadana = stworzGenerator(w.at(i),param.at(i),m_WartoscZadana);
-//        --i;
-//        for(;i>=0;--i){
-//            m_WartoscZadana = stworzGenerator(w.at(i),param.at(i),m_WartoscZadana);
-//        }
     m_typyWymuszen.reserve(m_typyWymuszen.size()+w.size());
     m_typyWymuszen.insert(m_typyWymuszen.end(),w.begin(),w.end());
 
     m_parametryWymuszenia.reserve(m_parametryWymuszenia.size() + param.size());
-    m_parametryWymuszenia.insert(m_parametryWymuszenia.begin(),param.begin(),param.end());
-
+    m_parametryWymuszenia.insert(m_parametryWymuszenia.end(),param.begin(),param.end());
 }
 
 std::shared_ptr<Komponent> GeneratorWartosciZadanej::getWartoscZadana() const

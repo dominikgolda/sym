@@ -12,7 +12,23 @@
 #include "stale.h"
 #include "gui/generatorwartoscizadanej.h"
 
-enum class DopuszczalneNazwyZmiennych{m_wZadana,m_licznik1,m_licznik2,m_mianownik1,m_mianownik2,m_wariancja,m_dh,m_delay,m_momentPrzelaczenia,m_czas,m_predkoscSymulacji,m_wzmocnienie};
+enum class DopuszczalneNazwyZmiennych{
+    m_wZadana,
+    m_licznik1,
+    m_licznik2,
+    m_mianownik1,
+    m_mianownik2,
+    m_wariancja,
+    m_dh,m_delay,
+    m_momentPrzelaczenia,
+    m_czas,
+    m_predkoscSymulacji,
+    m_wzmocnienie,
+    m_Ti,
+    m_TD,
+    m_b,
+    m_N
+};
 
 typedef QMap<DopuszczalneNazwyZmiennych,QVector<double>> QMapaDanych;
 
@@ -34,11 +50,11 @@ public:
     //c/////////////////////////////////////////////////////////
     ~QKontrolerSymulacji();
 
+    static QMapaDanych stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, QVector<double> vec);
+    static QMapaDanych stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, double wart);
     //c/////////////////////////////////////////////////////////
     //c//////////      SYGNAŁY              ////////////////////
     //c/////////////////////////////////////////////////////////
-    static QMapaDanych stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, QVector<double> vec);
-    static QMapaDanych stworzQMapeDanych(const DopuszczalneNazwyZmiennych klucz, double wart);
  signals:
     ///
     /// \brief symulacjaZakonczona - wysyłany jeżeli skończyła się sekwencja próbek podanych na wejście, lub jeżeli była ona pusta

@@ -9,7 +9,7 @@
 #include<iostream>
 #include<QMessageBox>
 #include<string>
-
+#include "gui/nastawypid.h"
 
 QKontrolerSymulacji::QKontrolerSymulacji(ObiektDyskretny *kontrolowany,PetlaRegulacji *petla, QObject *parent) :
     QObject(parent),m_genWZadanej(new GeneratorWartosciZadanej)
@@ -106,7 +106,7 @@ void QKontrolerSymulacji::onTimeout(){
 void QKontrolerSymulacji::m_symuluj(){
     if(m_petla!=NULL){
         //odpowiedź na skok jednostkowy
-        if(m_u.size()==1){
+        if(m_u.size()>=1){
             double czas;
             //symulacja
             double y = m_petla->symuluj(m_u.at(0));
@@ -121,7 +121,7 @@ void QKontrolerSymulacji::m_symuluj(){
             m_histY.push_back(y);
         }
         //odpowiedź na zadaną sekwencję wejść
-        else if(m_u.size()>m_licznikProbek){
+       /* else if(m_u.size()>m_licznikProbek){
             double czas;
             //symulacja
             double y = m_petla->symuluj(m_u.at(m_licznikProbek));
@@ -132,8 +132,8 @@ void QKontrolerSymulacji::m_symuluj(){
             m_histU.push_back(m_u.at(m_licznikProbek));
             m_histY.push_back(y);
             //przejście do następnej próbki
-            ++m_licznikProbek;
-        }
+            ++m_licznikProbek;*/
+        //}
         //zadana sekwencja wejść skończyła sie, lub przesłano pusty wektor
         else{
             m_symulacjaCiagla = false;
@@ -279,12 +279,58 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
             setPredkoscSymulacji(static_cast<int>(it.value()[0]));
         }
     }
-
+//NASTAWY REGULATORA PID
     pom = DopuszczalneNazwyZmiennych::m_wzmocnienie;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
-            m_petla->setNastawyRegulatora(it.value().toStdVector());
+            double pom = it.value().toStdVector().at(0);
+            m_petla->setNastawyRegulatora(NastawyPid::m_kr(pom));
+        }
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_b;
+    it = m.find(pom);
+    if(it!=m.end()){
+        if(!(it.value().empty())){
+            double pom = it.value().toStdVector().at(0);
+            m_petla->setNastawyRegulatora(NastawyPid::m_b(pom));
+        }
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_TD;
+    it = m.find(pom);
+    if(it!=m.end()){
+        if(!(it.value().empty())){
+            double pom = it.value().toStdVector().at(0);
+            m_petla->setNastawyRegulatora(NastawyPid::m_TD(pom));
+        }
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_N;
+    it = m.find(pom);
+    if(it!=m.end()){
+        if(!(it.value().empty())){
+            double pom = it.value().toStdVector().at(0);
+            m_petla->setNastawyRegulatora(NastawyPid::m_N(pom));
+        }
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_Ti;
+    it = m.find(pom);
+    if(it!=m.end()){
+        if(!(it.value().empty())){
+            double pom = it.value().toStdVector().at(0);
+            m_petla->setNastawyRegulatora(NastawyPid::m_Ti(pom));
+        }
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_dh;
+    it = m.find(pom);
+    if(it!=m.end()){
+        if(!(it.value().empty())){
+            double pom = it.value().toStdVector().at(0);
+            m_petla->setNastawyRegulatora(NastawyPid::m_Tp(pom));
         }
     }
 

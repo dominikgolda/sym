@@ -19,7 +19,7 @@ public:
     /// \brief setNastawyRegulatora - pozwala zmienić wzmocnienie regulatora
     /// \param nastawy - brana jest pod uwagę tylko pierwsza wartość w pierwszym wektorze
     ///
-    void setNastawyRegulatora(std::vector<double> nastawy);
+    void setNastawyRegulatora(NastawyRegulatora nastawy);
     void wczytajDane(string);
     void zapiszDane(string, string);
 private:

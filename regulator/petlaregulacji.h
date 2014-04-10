@@ -35,7 +35,7 @@ public:
     /// \brief setNastawyRegulatora - ustawia parametry regulatora
     /// \param nastawy - zależne od regulatora, dla którego jest wywoływane
     ///
-    void setNastawyRegulatora(std::vector<double> nastawy);
+    void setNastawyRegulatora(NastawyRegulatora nastawy);
 
     ///
     /// \brief setWartoscZadana - tworzy generator wartości zadanej opisany przez zmienne funkcji

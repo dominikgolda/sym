@@ -5,7 +5,10 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <map>
 #include "stale.h"
+
+
 class Regulator : public ObiektSiso
 {
 public:
@@ -58,7 +61,7 @@ public:
     /// \brief setNastawyRegulatora - ustawia parametry regulatora. Funkcja czysto wirtualna.
     /// \param nastawy
     ///
-    virtual void setNastawyRegulatora(std::vector<double> nastawy)=0;
+    virtual void setNastawyRegulatora(NastawyRegulatora nastawy)=0;
     ///
     /// \brief getTime
     /// \return zwraca czas symulacji w próbkach

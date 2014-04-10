@@ -64,7 +64,7 @@ void PetlaRegulacji::dodajRegulator(Regulator *reg)
     }
 }
 
-void PetlaRegulacji::setNastawyRegulatora(std::vector<double> nastawy)
+void PetlaRegulacji::setNastawyRegulatora(NastawyRegulatora nastawy)
 {
     if(m_jestRegulator){
         dynamic_cast<Regulator*>(m_obiekty.at(0))->setNastawyRegulatora(nastawy);

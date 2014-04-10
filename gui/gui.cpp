@@ -72,14 +72,16 @@ void Gui::odbierzWyniki(QVector<double> y, QVector<double> t, QVector<double> u,
     m_ui->m_wykrWyjWartZad->graph(1)->addData(t,wz);
     m_ui->m_wykrSter->graph(0)->addData(t,u);
     m_ui->m_wykrSter->graph(0)->rescaleValueAxis();
-    m_ui->m_wykrWyjWartZad->graph(0)->rescaleValueAxis();
-    m_ui->m_wykrWyjWartZad->graph(1)->rescaleValueAxis();
-    przeskalujOsie();
+//    m_ui->m_wykrWyjWartZad->graph(0)->rescaleValueAxis();
+//    m_ui->m_wykrWyjWartZad->graph(1)->rescaleValueAxis();
+    m_ui->m_wykrWyjWartZad->rescaleAxes();
+
      //ustawianie wartości w labelach
     m_ui->labelSterowanie->setText(QString::number(u.last()));
     m_ui->labelWyjscie->setText(QString::number(y.last()));
     m_ui->labelWZadana->setText(QString::number(u.last()));
 
+    przeskalujOsie();
 }
 
 //c/////////            symulacja zakończona        ////////////
@@ -214,7 +216,19 @@ void Gui::ustawWykres()
     m_ui->m_wykrWyjWartZad->graph(1)->setPen(QPen(Qt::red));
     m_ui->m_wykrWyjWartZad->xAxis->setLabel("t[s]");
     m_ui->m_wykrWyjWartZad->yAxis->setLabel("y");
-    m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
+ //   m_ui->m_wykrWyjWartZad->graph(0)->rescaleAxes();
+//    m_ui->m_wykrWyjWartZad->graph(1)->rescaleAxes();
+    m_ui->m_wykrWyjWartZad->rescaleAxes();
+
+    m_ui->m_wykrSter->graph(0)->addData(0,0);
+    m_ui->m_wykrWyjWartZad->graph(0)->addData(0,0);
+    m_ui->m_wykrWyjWartZad->graph(0)->addData(0,0);
+
+    m_ui->m_wykrSter->graph(0)->setLineStyle(QCPGraph::lsStepLeft );
+    m_ui->m_wykrWyjWartZad->graph(0)->setLineStyle(QCPGraph::lsStepLeft );
+    m_ui->m_wykrWyjWartZad->graph(1)->setLineStyle(QCPGraph::lsStepLeft );
+
+
     przeskalujOsie();
 
 }
@@ -257,6 +271,7 @@ void Gui::on_setLiczbaWidocznychProbek_returnPressed()
     }else{
         m_liczbaWidocznychProbek = 1;
     }
+    przeskalujOsie();
 }
 
 //c//////////    ustaw kontrolki   //////////////////
@@ -398,6 +413,7 @@ void Gui::on_setDh_returnPressed()
 {
     double pom = m_ui->setDh->text().toDouble();
     emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_dh,pom));
+    przeskalujOsie();
 }
 
 //s//////////        prędkość symulacji               /////////
@@ -412,6 +428,35 @@ void Gui::on_setWzmocnienie_returnPressed(){
     p.push_back(m_ui->setWzmocnienie->text().toDouble());
     emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_wzmocnienie,p));
 }
+
+void Gui::on_setTi_returnPressed()
+{
+    QVector<double> p;
+    p.push_back(m_ui->setTi->text().toDouble());
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_Ti,p));
+}
+
+void Gui::on_setTD_returnPressed()
+{
+    QVector<double> p;
+    p.push_back(m_ui->setTD->text().toDouble());
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_TD,p));
+}
+
+void Gui::on_setb_returnPressed()
+{
+    QVector<double> p;
+    p.push_back(m_ui->setb->text().toDouble());
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_b,p));
+}
+
+void Gui::on_setN_returnPressed()
+{
+    QVector<double> p;
+    p.push_back(m_ui->setN->text().toDouble());
+    emit setParameters(QKontrolerSymulacji::stworzQMapeDanych(DopuszczalneNazwyZmiennych::m_N,p));
+}
+
 
 //s////////////////////////////////////////////////////////////
 //s//////////         Kontrola symulacji              /////////
@@ -444,6 +489,11 @@ void Gui::on_resetujWykresy_clicked()
     m_ui->m_wykrSter->graph(0)->clearData();
     m_ui->m_wykrWyjWartZad->graph(0)->clearData();
     m_ui->m_wykrWyjWartZad->graph(1)->clearData();
+
+    m_ui->m_wykrSter->graph(0)->addData(0,0);
+    m_ui->m_wykrWyjWartZad->graph(0)->addData(0.0,0.0);
+    m_ui->m_wykrWyjWartZad->graph(0)->addData(0.0,0.0);
+    przeskalujOsie();
 }
 
 //s//////////        symulacja krokowa                 /////////
@@ -582,4 +632,5 @@ void Gui::on_aktualizujWartoscStala_clicked()
     setParameters(typ,par);
 
 }
+
 

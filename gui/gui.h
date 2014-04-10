@@ -96,6 +96,10 @@ private slots:
     void on_aktualizujWartoscTrojkat_clicked();
     void on_aktualizujWartoscStala_clicked();
     void on_setLiczbaWidocznychProbek_returnPressed();
+    void on_setTi_returnPressed();
+    void on_setTD_returnPressed();
+    void on_setb_returnPressed();
+    void on_setN_returnPressed();
 };
 
 #endif // GUI_H

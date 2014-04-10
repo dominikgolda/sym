@@ -18,10 +18,11 @@ double RegulatorP::symuluj(double y)
     return m_k*(wartoscZadana - y);
 }
 
-void RegulatorP::setNastawyRegulatora(std::vector<double> nastawy)
+void RegulatorP::setNastawyRegulatora(NastawyRegulatora nastawy)
 {
-    if(nastawy.end()!=nastawy.begin()){
-        m_k = nastawy[0];
+    auto pom = nastawy.find("m_k");
+    if(nastawy.end()!=pom){
+        m_k = nastawy[std::string("m_k")].at(0);
     }
 }
 
