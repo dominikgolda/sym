@@ -12,7 +12,8 @@ double RegulatorPID::symuluj(double y)
     wZadana = m_WartoscZadana->generuj(m_nrProbki);
     P = m_kr*(m_b*wZadana - y);
     I = m_kr/m_Ti/2.0*(wZadana-y +m_poprzedniUchyb);
-    D = m_TD/(m_TD+m_N*m_Tp)*(m_poprzednieD-m_kr*m_N*(y - m_poprzednieWejscie) );
+//    D = m_TD/(m_TD+m_N*m_Tp)*m_poprzednieD-m_kr*m_N*(y - m_poprzednieWejscie);
+    D = m_TD*m_poprzednieD/(m_TD+m_N*m_Tp) - m_kr*m_N*m_TD*(y - m_poprzednieWejscie)/(m_TD+m_N*m_Tp);
 
     m_poprzednieWejscie = y;
     m_poprzednieD = D;
