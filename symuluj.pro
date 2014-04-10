@@ -13,12 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    qcustomplot/qcustomplot.cpp \
     obiektsiso.cpp \
     obiektdyskretny.cpp \
-    gui.cpp \
     qvectorvalidator.cpp \
-    qkontrolersymulacji.cpp \
     dekorator/dekorator.cpp \
     dekorator/komponent.cpp \
     dekorator/dekorujtrojkatem.cpp \
@@ -26,17 +23,22 @@ SOURCES += main.cpp\
     dekorator/dekorujsinusem.cpp \
     dekorator/dekorujprostokatem.cpp \
     dekorator/komponentkonkretny.cpp \
-    regulator/kompozytobiektow.cpp \
     regulator/regulator.cpp \
     regulator/petlaregulacji.cpp \
-    regulator/regulatorp.cpp
+    regulator/regulatorp.cpp \
+    gui/qkontrolersymulacji.cpp \
+    gui/gui.cpp \
+    gui/generatorwartoscizadanej.cpp \
+    qcustomplot/qcustomplot.cpp \
+    regulator/regulatorpid.cpp \
+    regulator/polaczenieszeregowe.cpp \
+    klasaxml/klasaxml.cpp \
+    gui/nastawypid.cpp
 
 HEADERS  += \
     qcustomplot.h \
     obiektsiso.h \
     obiektdyskretny.h \
-    qkontrolersymulacji.h \
-    gui.h \
     stale.h \
     qvectorvalidator.h \
     dekorator/dekorujtrojkatem.h \
@@ -46,10 +48,16 @@ HEADERS  += \
     dekorator/dekorator.h \
     dekorator/komponent.h \
     dekorator/komponentkonkretny.h \
-    regulator/kompozytobiektow.h \
     regulator/regulator.h \
     regulator/petlaregulacji.h \
-    regulator/regulatorp.h
+    regulator/regulatorp.h \
+    gui/qkontrolersymulacji.h \
+    gui/gui.h \
+    gui/generatorwartoscizadanej.h \
+    regulator/regulatorpid.h \
+    regulator/polaczenieszeregowe.h \
+    klasaxml/klasaxml.h \
+    gui/nastawypid.h
 
 FORMS    += \
     gui.ui
