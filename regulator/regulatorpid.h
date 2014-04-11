@@ -28,6 +28,11 @@ public:
     void setNastawyRegulatora(NastawyRegulatora nastawy);
 
     ///
+    /// \brief getNastawyRegulatora
+    /// \return
+    ///
+    NastawyRegulatora getNastawyRegulatora();
+    ///
     /// \brief wczytajDane - wczytuje nastawy regulatora z pliku
     /// \param sciezka - ścieżka do pliku
     ///

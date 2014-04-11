@@ -26,6 +26,14 @@ void RegulatorP::setNastawyRegulatora(NastawyRegulatora nastawy)
     }
 }
 
+NastawyRegulatora RegulatorP::getNastawyRegulatora()
+{
+    NastawyRegulatora p;
+    std::vector<double> wektor;
+    wektor.push_back(m_k);
+    p["m_k"] = wektor;
+}
+
 void RegulatorP::wczytajDane(string)
 {
 

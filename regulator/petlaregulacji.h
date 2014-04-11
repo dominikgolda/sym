@@ -38,6 +38,11 @@ public:
     void setNastawyRegulatora(NastawyRegulatora nastawy);
 
     ///
+    /// \brief getNastawyRegulatora - zwraca nastawy regulatora o ile jakiś znajduje się w pętli
+    /// \return - nastawy regulaotra
+    ///
+    NastawyRegulatora getNastawyRegulatora();
+    ///
     /// \brief setWartoscZadana - tworzy generator wartości zadanej opisany przez zmienne funkcji
     /// \param w - typy wymuszeń jakie mają być użyte, pierwszy element w "w" jest najbardziej zewnętrznym jaki zostanie stworzony
     /// \param param - parametry dla tworzonych generatorów

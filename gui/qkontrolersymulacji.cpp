@@ -280,7 +280,7 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
         }
     }
 //NASTAWY REGULATORA PID
-    pom = DopuszczalneNazwyZmiennych::m_wzmocnienie;
+   pom = DopuszczalneNazwyZmiennych::m_wzmocnienie;
     it = m.find(pom);
     if(it!=m.end()){
         if(!(it.value().empty())){
@@ -333,6 +333,9 @@ void QKontrolerSymulacji::odbierzDaneObiektu(QMapaDanych m)
             m_petla->setNastawyRegulatora(NastawyPid::m_Tp(pom));
         }
     }
+
+    //odesłanie danych które są faktycznie ustawione
+    zbierzDaneDoprzeslania();
 
 }
 
@@ -452,6 +455,15 @@ void QKontrolerSymulacji::zbierzDaneDoprzeslania()
     pom.push_back(m_ob->czas());
     m[DopuszczalneNazwyZmiennych::m_czas] = pom;
     pom.clear();
+
+    NastawyRegulatora nastawy;
+    nastawy = m_petla->getNastawyRegulatora();
+    m = NastawyPid::getM_b(nastawy,m);
+    m = NastawyPid::getM_kr(nastawy,m);
+    m = NastawyPid::getM_N(nastawy,m);
+    m = NastawyPid::getM_TD(nastawy,m);
+    m = NastawyPid::getM_Ti(nastawy,m);
+    m = NastawyPid::getM_Tp(nastawy,m);
 
     emit wyslijDaneObiektu(m);
 }

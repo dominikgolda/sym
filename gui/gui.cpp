@@ -7,7 +7,7 @@
 #include<map>
 #include "stale.h"
 #include "qvectorvalidator.h"
-
+#include "nastawypid.h"
 
 //s////////////////////////////////////////////////////////////
 //s//////////      Konstruktor               //////////////////
@@ -165,9 +165,40 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
         setTextDlaKontrolekDouble(m_ui->setWariancja,QString::number(it.value()[0]));
     }
 
+    pom = DopuszczalneNazwyZmiennych::m_wariancja;
+    it = m.find(pom);
+    if(it!=m.end()){
+        setTextDlaKontrolekDouble(m_ui->setWariancja,QString::number(it.value()[0]));
+    }
+//c/////////////////////////////////////////////////////////
+//c////         NASTAWY PID                         ///////
+//c////////////////////////////////////////////////////////
+    pom = DopuszczalneNazwyZmiennych::m_b;
+    it = m.find(pom);
+    if(it!=m.end()){
+        setTextDlaKontrolekDouble(m_ui->setb,QString::number(it.value()[0]));
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_N;
+    it = m.find(pom);
+    if(it!=m.end()){
+        setTextDlaKontrolekDouble(m_ui->setN,QString::number(it.value()[0]));
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_TD;
+    it = m.find(pom);
+    if(it!=m.end()){
+        setTextDlaKontrolekDouble(m_ui->setTD,QString::number(it.value()[0]));
+    }
+
+    pom = DopuszczalneNazwyZmiennych::m_Ti;
+    it = m.find(pom);
+    if(it!=m.end()){
+        setTextDlaKontrolekDouble(m_ui->setTi,QString::number(it.value()[0]));
+    }
 
 
-}
+ }
 
 //s////////////////////////////////////////////////////////////
 //s//////////      FUNKCJE POMOCNICZE             /////////////
@@ -307,6 +338,10 @@ void Gui::ustawKontrolki()
     setTextDlaKontrolekDouble(m_ui->setTrojkatT,QString("50"));
     setTextDlaKontrolekDouble(m_ui->setWartoscStala,QString("2"));
     setTextDlaKontrolekDouble(m_ui->setWzmocnienie,QString("1"));
+    setTextDlaKontrolekDouble(m_ui->setb,QString("1"));
+    setTextDlaKontrolekDouble(m_ui->setN,QString("1"));
+    setTextDlaKontrolekDouble(m_ui->setTi,QString("1"));
+    setTextDlaKontrolekDouble(m_ui->setTD,QString("1"));
 
     QIntValidator *pom1 = new QIntValidator;
     m_ui->setLiczbaWidocznychProbek->setText(QString("200"));

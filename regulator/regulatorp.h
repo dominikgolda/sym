@@ -20,6 +20,8 @@ public:
     /// \param nastawy - brana jest pod uwagę tylko pierwsza wartość w pierwszym wektorze
     ///
     void setNastawyRegulatora(NastawyRegulatora nastawy);
+
+    NastawyRegulatora getNastawyRegulatora();
     void wczytajDane(string);
     void zapiszDane(string, string);
 private:

@@ -7,110 +7,203 @@ RegulatorPID::RegulatorPID()
 double RegulatorPID::symuluj(double y)
 {
     double wZadana;
-    double P,I,D;
+    double P=0,I=0,D = 0;
+    //licznik próbek - potrzebny do generacji wartości zadanej
     m_nrProbki++;
     wZadana = m_WartoscZadana->generuj(m_nrProbki);
+    //część proporcjonalna - z uwzględnieniem mniejszej od 1 wagi wartości zadanej
     P = m_kr*(m_b*wZadana - y);
-    I = m_kr/m_Ti/2.0*(wZadana-y +m_poprzedniUchyb);
-//    D = m_TD/(m_TD+m_N*m_Tp)*m_poprzednieD-m_kr*m_N*(y - m_poprzednieWejscie);
-    D = -m_TD*m_poprzednieD/(m_TD+m_N*m_Tp) + m_kr*m_N*m_TD*(y - m_poprzednieWejscie)/(m_TD+m_N*m_Tp);
+    //część całkująca
+    if(m_Ti>epsilon){
+        I = m_kr/m_Ti/2.0*(wZadana-y +m_poprzedniUchyb);
+    }
+    //część różniczkująca
+    if(m_TD+m_N*m_Tp>epsilon){
+        D = -m_TD*m_poprzednieD/(m_TD+m_N*m_Tp) + m_kr*m_N*m_TD*(y - m_poprzednieWejscie)/(m_TD+m_N*m_Tp);
+    }
+    m_wartoscCalki +=I;
 
     m_poprzednieWejscie = y;
     m_poprzednieD = D;
     m_poprzedniUchyb = wZadana - y;
-    m_wartoscCalki +=I;
     return P+m_wartoscCalki+D;
 }
 
 void RegulatorPID::setNastawyRegulatora(NastawyRegulatora nastawy)
 {
+    double kr = m_kr,TD = m_TD,N = m_N,Ti = m_Ti,b = m_b,Tp = m_Tp;
+    bool nastawyPoprawne = true;
     //szukamy w mapie m_kr
     auto pom = nastawy.find("m_kr");
     //sprawdzamy, czy element "m_kr" istnieje
     if(nastawy.end()!=pom){
+        //sprawdzamy, czy wektor z parametrami nie jest pusty
         if(pom->second.size()>=1){
-            m_kr = pom->second.at(0);
+            if(pom->second.at(0)<-epsilon || pom->second.at(0)>epsilon){
+                kr = pom->second.at(0);
+            }else{
+                nastawyPoprawne = false;
+            }
+        }else{
+            nastawyPoprawne = false;
         }
     }
 
     pom = nastawy.find("m_TD");
     if(nastawy.end()!=pom){
         if(pom->second.size()>=1){
-            m_TD = pom->second.at(0);
+            //sprawdzamy, czy nie podano ujemnej stałej czasowej
+            if(pom->second.at(0)>=epsilon){
+                TD = pom->second.at(0);
+            }else{
+                nastawyPoprawne = false;
+            }
+        }else{
+            nastawyPoprawne = false;
         }
     }
 
     pom = nastawy.find("m_N");
     if(nastawy.end()!=pom){
         if(pom->second.size()>=1){
-           m_N  = pom->second.at(0);
+            //sprawdzamy, czy N nie jet ujemne
+            if(pom->second.at(0)>=epsilon){
+                N  = pom->second.at(0);
+            }else{
+                nastawyPoprawne = false;
+            }
+        }else{
+            nastawyPoprawne = false;
         }
     }
 
     pom = nastawy.find("m_Ti");
     if(nastawy.end()!=pom){
         if(pom->second.size()>=1){
-            m_Ti = pom->second.at(0);
+            //sprawdzamy czy stała czasowa nie jest ujemna
+            if(pom->second.at(0)>epsilon){
+                Ti = pom->second.at(0);
+            }else{
+                nastawyPoprawne = false;
+            }
+        }else{
+            nastawyPoprawne = false;
         }
     }
 
     pom = nastawy.find("m_b");
     if(nastawy.end()!=pom){
         if(pom->second.size()>=1){
-            m_b = pom->second.at(0);
+            //sprawdzamy, czy m_b jest w zakresie (0,1>
+            if(pom->second.at(0)>epsilon&&pom->second.at(0)<=1){
+                b = pom->second.at(0);
+            }else{
+                nastawyPoprawne = false;
+            }
+        }else{
+            nastawyPoprawne = false;
         }
     }
 
     pom = nastawy.find("m_Tp");
     if(nastawy.end()!=pom){
         if(pom->second.size()>=1){
-            m_Tp = pom->second.at(0);
+            if(pom->second.at(0)>epsilon){
+                Tp = pom->second.at(0);
+            }else{ //ponieważ tak samo jest w obiekcie dyskretnym. Nie ma sensu dawać zerowego okersu próbkowania
+                nastawyPoprawne = false;
+            }
+        }else{
+            nastawyPoprawne = false;
         }
     }
+    //przepisujemy dane ze zmiennych tymczasowych
+    if(nastawyPoprawne){
+        m_kr=kr;
+        m_TD= TD;
+        m_N = N;
+        m_Ti =Ti;
+        m_b = b;
+        m_Tp = Tp;
+    }
 
-//    pom = nastawy.find("");
-//    if(nastawy.end()!=pom){
-//        if(pom->second.size()>=1){
-//             = pom->second.at(0);
-//        }
-//    }
 
+}
+
+NastawyRegulatora RegulatorPID::getNastawyRegulatora()
+{
+    NastawyRegulatora pom;
+    std::vector<double> vec;
+
+    vec.push_back(m_kr);
+    pom["m_kr"] = vec;
+
+    vec.clear();
+    vec.push_back(m_TD);
+    pom["m_TD"] = vec;
+
+    vec.clear();
+    vec.push_back(m_N);
+    pom["m_N"] = vec;
+
+    vec.clear();
+    vec.push_back(m_Ti);
+    pom["m_Ti"] = vec;
+
+    vec.clear();
+    vec.push_back( m_b);
+    pom["m_b"] = vec;
+
+    vec.clear();
+    vec.push_back( m_Tp);
+    pom["m_Tp"] = vec;
+
+    return pom;
 
 }
 
 void RegulatorPID::wczytajDane(string sciezka)
 {
     std::vector<double> pom;
+    double kr = m_kr,TD = m_TD,N = m_N,Ti = m_Ti,b = m_b,Tp = m_Tp;
 
     pom = m_kXml.wczytaj("m_kr",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-        m_kr = pom.at(0);
+        kr = pom.at(0);
     }
 
     pom = m_kXml.wczytaj("m_TD",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-         m_TD= pom.at(0);
+        TD= pom.at(0);
     }
 
     pom = m_kXml.wczytaj("m_Ti",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-         m_Ti= pom.at(0);
+        Ti= pom.at(0);
     }
 
     pom = m_kXml.wczytaj("m_N",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-        m_N = pom.at(0);
+        N = pom.at(0);
     }
 
     pom = m_kXml.wczytaj("m_b",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-         m_b= pom.at(0);
+         b= pom.at(0);
     }
 
     pom = m_kXml.wczytaj("m_Tp",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-         m_Tp= pom.at(0);
+         Tp= pom.at(0);
     }
+
+    //przepisujemy dane ze zmiennych tymczasowych
+    m_kr=kr;
+    m_TD= TD;
+    m_N = N;
+    m_Ti =Ti;
+    m_b = b;
+    m_Tp = Tp;
 
 }
 

@@ -63,6 +63,11 @@ public:
     ///
     virtual void setNastawyRegulatora(NastawyRegulatora nastawy)=0;
     ///
+    /// \brief getNastawyRegulatora - zwraca nastawy stosowane przez regulator
+    /// \return - obecne nastawy regulatora
+    ///
+    virtual NastawyRegulatora getNastawyRegulatora()=0;
+    ///
     /// \brief getTime
     /// \return zwraca czas symulacji w próbkach
     ///

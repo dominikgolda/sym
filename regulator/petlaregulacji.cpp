@@ -71,6 +71,13 @@ void PetlaRegulacji::setNastawyRegulatora(NastawyRegulatora nastawy)
     }
 }
 
+NastawyRegulatora PetlaRegulacji::getNastawyRegulatora()
+{
+    if(m_jestRegulator){
+        return dynamic_cast<Regulator*>(m_obiekty.at(0))->getNastawyRegulatora();
+    }
+}
+
 void PetlaRegulacji::setWartoscZadana(shared_ptr<Komponent> wartoscZadana)
 {
     if(m_jestRegulator){
