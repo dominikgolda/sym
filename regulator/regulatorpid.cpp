@@ -36,6 +36,11 @@ void RegulatorPID::setNastawyRegulatora(NastawyRegulatora nastawy)
     bool nastawyPoprawne = true;
     //szukamy w mapie m_kr
     auto pom = nastawy.find("m_kr");
+
+//c//////////////////////////////////////////////////////////
+//c////         ODCZYTYWANIE MAPY PRZEKAZANEJ DO FUNKCJI  ///
+//c//////////////////////////////////////////////////////////
+
     //sprawdzamy, czy element "m_kr" istnieje
     if(nastawy.end()!=pom){
         //sprawdzamy, czy wektor z parametrami nie jest pusty
@@ -118,7 +123,9 @@ void RegulatorPID::setNastawyRegulatora(NastawyRegulatora nastawy)
             nastawyPoprawne = false;
         }
     }
-    //przepisujemy dane ze zmiennych tymczasowych
+//c//////////////////////////////////////////////////////////
+//c////     PRZEPISANIE DANYCH ZE ZMIENNYCH TYMCZASOWYCH  ///
+//c//////////////////////////////////////////////////////////
     if(nastawyPoprawne){
         m_kr=kr;
         m_TD= TD;
