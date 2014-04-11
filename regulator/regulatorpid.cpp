@@ -31,6 +31,7 @@ double RegulatorPID::symuluj(double y)
 
 void RegulatorPID::setNastawyRegulatora(NastawyRegulatora nastawy)
 {
+    //przypisujemy do zmiennych tymczasowych poprzednie nastawy. Dzięki temu nie trzeba zmieniać wszystkich nastaw.
     double kr = m_kr,TD = m_TD,N = m_N,Ti = m_Ti,b = m_b,Tp = m_Tp;
     bool nastawyPoprawne = true;
     //szukamy w mapie m_kr
@@ -166,45 +167,71 @@ void RegulatorPID::wczytajDane(string sciezka)
 {
     std::vector<double> pom;
     double kr = m_kr,TD = m_TD,N = m_N,Ti = m_Ti,b = m_b,Tp = m_Tp;
+    bool nastawyPoprawne = true;
 
     pom = m_kXml.wczytaj("m_kr",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-        kr = pom.at(0);
+        if(pom.at(0)>epsilon||pom.at(0)<-epsilon){
+            kr = pom.at(0);
+        }else{
+            nastawyPoprawne = false;
+        }
     }
 
     pom = m_kXml.wczytaj("m_TD",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-        TD= pom.at(0);
+        if(pom.at(0)>epsilon){
+            TD= pom.at(0);
+        }else{
+            nastawyPoprawne = false;
+        }
     }
 
     pom = m_kXml.wczytaj("m_Ti",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-        Ti= pom.at(0);
+        if(pom.at(0)>epsilon){
+            Ti= pom.at(0);
+        }else{
+            nastawyPoprawne = false;
+        }
     }
 
     pom = m_kXml.wczytaj("m_N",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-        N = pom.at(0);
+        if(pom.at(0)>epsilon){
+            N = pom.at(0);
+        }else{
+            nastawyPoprawne = false;
+        }
     }
 
     pom = m_kXml.wczytaj("m_b",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-         b= pom.at(0);
+        if(pom.at(0)>epsilon && pom.at(0)<=1){
+             b= pom.at(0);
+        }else{
+            nastawyPoprawne = false;
+        }
     }
 
     pom = m_kXml.wczytaj("m_Tp",sciezka,m_nazwaRegulatora);
     if(pom.size()>=1){
-         Tp= pom.at(0);
+        if(pom.at(0)>epsilon){
+            Tp= pom.at(0);
+        }else{
+            nastawyPoprawne = false;
+        }
     }
 
     //przepisujemy dane ze zmiennych tymczasowych
-    m_kr=kr;
-    m_TD= TD;
-    m_N = N;
-    m_Ti =Ti;
-    m_b = b;
-    m_Tp = Tp;
-
+    if(nastawyPoprawne){
+        m_kr=kr;
+        m_TD= TD;
+        m_N = N;
+        m_Ti =Ti;
+        m_b = b;
+        m_Tp = Tp;
+    }
 }
 
 void RegulatorPID::zapiszDane(string sciezka, string)

@@ -179,6 +179,12 @@ void Gui::ustawDaneDlaUzytkownika(QMapaDanych m)
         setTextDlaKontrolekDouble(m_ui->setb,QString::number(it.value()[0]));
     }
 
+    pom = DopuszczalneNazwyZmiennych::m_wzmocnienie;
+    it = m.find(pom);
+    if(it!=m.end()){
+        setTextDlaKontrolekDouble(m_ui->setWzmocnienie,QString::number(it.value()[0]));
+    }
+
     pom = DopuszczalneNazwyZmiennych::m_N;
     it = m.find(pom);
     if(it!=m.end()){

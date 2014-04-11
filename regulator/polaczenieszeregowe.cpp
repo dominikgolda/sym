@@ -33,14 +33,26 @@ void PolaczenieSzeregowe::wczytajDane(std::string sciezka)
 
 void PolaczenieSzeregowe::zapiszDane(std::string sciezka, std::string nazwa_obiektu)
 {
+//    auto it = m_obiekty.begin();
+//    if(m_obiekty.begin()!=m_obiekty.end()){
+//        (*it)->zapiszDane(sciezka,nazwa_obiektu);
+//        ++it;
+//    }
+//    for(;it!=m_obiekty.end();++it){
+//        (*it)->zapiszDane(sciezka,nazwa_obiektu);
+//    }
     auto it = m_obiekty.begin();
     if(m_obiekty.begin()!=m_obiekty.end()){
+        it = m_obiekty.end();
+        --it;
         (*it)->zapiszDane(sciezka,nazwa_obiektu);
-        ++it;
+        --it;
     }
-    for(;it!=m_obiekty.end();++it){
+    for(;it!=m_obiekty.begin();--it){
         (*it)->zapiszDane(sciezka,nazwa_obiektu);
     }
+    (*it)->zapiszDane(sciezka,nazwa_obiektu);
+
 }
 void PolaczenieSzeregowe::resetujSymulacje()
 {
